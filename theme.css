@@ -1,0 +1,483 @@
+/* =================================================================
+   WoW - Warcraft UI — Theme for Obsidian
+   Crafted with love for Azerothian adventurers, GMs, and lorekeepers.
+   
+   Dark Mode:  The Dungeon & Tooltip Interface (Slate, Brass & Glowing Rarity)
+   Light Mode: The Questlog & Spellbook (Warm Parchment, Iron Ink & Wax Seals)
+   
+   Author: ShakToth
+   License: MIT
+   ================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=MedievalSharp&display=swap');
+
+/* =================================================================
+   ROOT: Core Warcraft Color Tokens
+   ================================================================= */
+:root {
+    /* --- Item Rarity Tokens --- */
+    --wow-poor: #9d9d9d;
+    --wow-common: #ffffff;
+    --wow-uncommon: #1eff00;
+    --wow-rare: #0070dd;
+    --wow-epic: #a335ee;
+    --wow-legendary: #ff8000;
+    --wow-artifact: #e6cc80;
+    --wow-heirloom: #00ccff;
+
+    /* --- Faction Tokens --- */
+    --wow-alliance-blue: #004a98;
+    --wow-alliance-gold: #f8b700;
+    --wow-horde-red: #b31b1b;
+    --wow-horde-iron: #211c19;
+
+    /* --- Class Color Palette --- */
+    --wow-warrior: #c79c6e;
+    --wow-paladin: #f58cba;
+    --wow-hunter: #abd473;
+    --wow-rogue: #fff569;
+    --wow-priest: #f0ebe0;
+    --wow-deathknight: #c41f3b;
+    --wow-shaman: #0070de;
+    --wow-mage: #69ccf0;
+    --wow-warlock: #9482c9;
+    --wow-monk: #00ff96;
+    --wow-druid: #ff7d0a;
+    --wow-demonhunter: #a330c9;
+    --wow-evoker: #33937f;
+
+    /* --- Fonts --- */
+    --font-heading: 'Cinzel', 'MedievalSharp', 'Georgia', serif;
+    --font-body: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    --font-parchment: 'Crimson Text', 'Georgia', serif;
+}
+
+/* =================================================================
+   DARK MODE: The Dungeon, Raid & Tooltip UI
+   ================================================================= */
+.theme-dark {
+    /* Backgrounds: Dark Stone & Slate */
+    --bg-dark-void: #0b0c0f;
+    --bg-stone-deep: #111217;
+    --bg-stone-mid: #161820;
+    --bg-stone-elevated: #1e202b;
+
+    --background-primary: var(--bg-stone-deep);
+    --background-primary-alt: var(--bg-dark-void);
+    --background-secondary: var(--bg-stone-mid);
+    --background-secondary-alt: #0e0f14;
+
+    /* Gold & Brass Borders */
+    --gold-bright: #f8b700;
+    --gold-primary: #d4af37;
+    --gold-brass: #c89b3c;
+    --gold-dark: #8a6a2a;
+    --gold-muted-border: rgba(200, 155, 60, 0.32);
+    --gold-glow: rgba(248, 183, 0, 0.25);
+
+    --background-modifier-border: var(--gold-muted-border);
+    --background-modifier-border-hover: rgba(248, 183, 0, 0.65);
+    --background-modifier-border-focus: var(--gold-bright);
+    --background-modifier-form-field: rgba(11, 12, 15, 0.85);
+    --background-modifier-box-shadow: 0 14px 38px rgba(0, 0, 0, 0.75);
+
+    /* Text: Bone, Silver & Ash */
+    --text-normal: #ded7cb;
+    --text-muted: #9e998e;
+    --text-faint: #6e6a61;
+
+    /* Headings: Blizzard Quest Gold Hierarchy */
+    --h1-color: var(--gold-bright);
+    --h2-color: #ebd078;
+    --h3-color: #d6cdb8;
+    --h4-color: var(--gold-brass);
+    --h5-color: #a8a396;
+    --h6-color: #7d786d;
+
+    /* Accents & Links */
+    --text-accent: var(--gold-bright);
+    --text-accent-hover: #ffd100;
+    --interactive-accent: var(--gold-brass);
+    --interactive-accent-hover: var(--gold-bright);
+    --interactive-normal: rgba(200, 155, 60, 0.08);
+    --interactive-hover: rgba(200, 155, 60, 0.18);
+
+    --link-color: #66a3ff;
+    --link-color-hover: #99c2ff;
+    --link-external-color: #ffaa00;
+    --link-external-color-hover: #ffd100;
+    --text-highlight-bg: rgba(248, 183, 0, 0.28);
+    --text-selection: rgba(248, 183, 0, 0.45);
+
+    /* Code Blocks (Artifact Theme) */
+    --code-normal: #e6cc80;
+    --code-background: #090a0d;
+
+    /* Tags (Horde / Alliance Amber Pills) */
+    --tag-color: var(--gold-bright);
+    --tag-background: rgba(200, 155, 60, 0.14);
+    --tag-background-hover: rgba(248, 183, 0, 0.28);
+    --tag-border-color: rgba(200, 155, 60, 0.45);
+    --tag-border-color-hover: var(--gold-bright);
+
+    /* Tabs & Navigation */
+    --tab-text-color: var(--text-muted);
+    --tab-text-color-active: var(--gold-bright);
+    --tab-text-color-focused-active: var(--gold-bright);
+    --nav-item-color: var(--text-muted);
+    --nav-item-color-hover: var(--text-normal);
+    --nav-item-color-active: var(--gold-bright);
+    --nav-item-background-hover: rgba(200, 155, 60, 0.12);
+    --nav-item-background-active: rgba(200, 155, 60, 0.22);
+
+    /* Scrollbars */
+    --scrollbar-bg: #0c0d10;
+    --scrollbar-thumb-bg: rgba(200, 155, 60, 0.35);
+
+    /* Status Bar */
+    --status-bar-background: #0c0d10;
+    --status-bar-border-color: var(--gold-muted-border);
+    --status-bar-text-color: var(--text-faint);
+}
+
+.theme-dark .app-container {
+    background:
+        radial-gradient(ellipse 70% 30% at 50% -5%, rgba(248, 183, 0, 0.08), transparent 70%),
+        radial-gradient(ellipse 80% 35% at 50% 105%, rgba(179, 27, 27, 0.12), transparent 70%),
+        var(--bg-stone-deep);
+}
+
+/* =================================================================
+   LIGHT MODE: The Questlog & Spellbook
+   ================================================================= */
+.theme-light {
+    /* Backgrounds: Warm Aged Parchment */
+    --parchment-bright: #fdf6e6;
+    --parchment-base: #f5ecd5;
+    --parchment-aged: #ebdcc0;
+    --parchment-dark: #dfccaa;
+
+    --background-primary: var(--parchment-base);
+    --background-primary-alt: var(--parchment-bright);
+    --background-secondary: var(--parchment-aged);
+    --background-secondary-alt: var(--parchment-dark);
+
+    /* Antique Brass & Wax Borders */
+    --wax-seal: #8c1b1b;
+    --ink-dark: #241a12;
+    --antique-gold: #8a5e12;
+    --antique-border: rgba(138, 94, 18, 0.35);
+
+    --background-modifier-border: var(--antique-border);
+    --background-modifier-border-hover: rgba(138, 94, 18, 0.75);
+    --background-modifier-border-focus: var(--antique-gold);
+    --background-modifier-form-field: rgba(253, 246, 230, 0.95);
+    --background-modifier-box-shadow: 0 10px 30px rgba(60, 40, 20, 0.25);
+
+    /* Typography: Iron Gall Ink */
+    --text-normal: var(--ink-dark);
+    --text-muted: #5c4532;
+    --text-faint: #8a735c;
+
+    /* Headings: Deep Crimson & Antique Gold */
+    --h1-color: #6e1313;
+    --h2-color: var(--antique-gold);
+    --h3-color: #3b2514;
+    --h4-color: #593e26;
+    --h5-color: #694b32;
+    --h6-color: #785a40;
+
+    /* Accents & Links */
+    --text-accent: var(--antique-gold);
+    --text-accent-hover: #b07a1a;
+    --interactive-accent: var(--wax-seal);
+    --interactive-accent-hover: #a82020;
+    --interactive-normal: rgba(138, 94, 18, 0.08);
+    --interactive-hover: rgba(138, 94, 18, 0.16);
+
+    --link-color: #174880;
+    --link-color-hover: #2264b3;
+    --link-external-color: var(--wax-seal);
+    --link-external-color-hover: #b02424;
+    --text-highlight-bg: rgba(248, 183, 0, 0.4);
+    --text-selection: rgba(212, 175, 55, 0.35);
+
+    /* Code Blocks (Warm Vellum) */
+    --code-normal: #4a2c0f;
+    --code-background: #ede0c2;
+
+    /* Tags */
+    --tag-color: #731414;
+    --tag-background: rgba(138, 94, 18, 0.12);
+    --tag-background-hover: rgba(138, 94, 18, 0.22);
+    --tag-border-color: rgba(138, 94, 18, 0.4);
+    --tag-border-color-hover: #731414;
+
+    /* Tabs & Navigation */
+    --tab-text-color: var(--text-muted);
+    --tab-text-color-active: var(--wax-seal);
+    --tab-text-color-focused-active: var(--wax-seal);
+    --nav-item-color: var(--text-muted);
+    --nav-item-color-hover: var(--text-normal);
+    --nav-item-color-active: var(--wax-seal);
+    --nav-item-background-hover: rgba(138, 94, 18, 0.1);
+    --nav-item-background-active: rgba(138, 94, 18, 0.18);
+
+    /* Scrollbars */
+    --scrollbar-bg: var(--parchment-aged);
+    --scrollbar-thumb-bg: rgba(138, 94, 18, 0.4);
+
+    /* Status Bar */
+    --status-bar-background: var(--parchment-aged);
+    --status-bar-border-color: var(--antique-border);
+    --status-bar-text-color: var(--text-faint);
+}
+
+.theme-light .cm-scroller,
+.theme-light .markdown-preview-view {
+    font-family: var(--font-parchment);
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+/* =================================================================
+   TYPOGRAPHY & HEADINGS
+   ================================================================= */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: 0.03em;
+    font-weight: 700;
+}
+
+h1 {
+    border-bottom: 2px solid var(--background-modifier-border);
+    padding-bottom: 0.3em;
+    margin-top: 1.2em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.theme-light h1 {
+    text-shadow: none;
+    border-bottom: 2px solid rgba(138, 94, 18, 0.4);
+}
+
+h2 {
+    border-bottom: 1px dashed var(--background-modifier-border);
+    padding-bottom: 0.2em;
+}
+
+/* =================================================================
+   UI FRAMES, BUTTONS & TABS
+   ================================================================= */
+.mod-root .workspace-tabs .workspace-tab-header.is-active {
+    border-top: 3px solid var(--text-accent);
+    background: var(--background-primary);
+}
+
+.theme-dark .mod-root .workspace-tabs .workspace-tab-header.is-active {
+    box-shadow: inset 0 2px 6px rgba(248, 183, 0, 0.2);
+}
+
+/* Modals & Popovers (Blizzard Dialog Frame Aesthetic) */
+.modal, .popover, .menu {
+    border: 1px solid var(--background-modifier-border);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 0 0 1px var(--background-modifier-border);
+    border-radius: 6px;
+}
+
+/* Buttons */
+button.mod-cta {
+    background-color: var(--interactive-accent);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--text-accent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 4px rgba(0,0,0,0.5);
+    transition: all 0.15s ease-in-out;
+}
+
+button.mod-cta:hover {
+    background-color: var(--interactive-accent-hover);
+    box-shadow: 0 0 8px var(--text-accent);
+    cursor: pointer;
+}
+
+/* =================================================================
+   TABLES: Beveled Loot & Stats Table
+   ================================================================= */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    margin: 1.2em 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+th {
+    background: rgba(200, 155, 60, 0.15);
+    font-family: var(--font-heading);
+    color: var(--text-accent);
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--background-modifier-border);
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+}
+
+.theme-light th {
+    background: rgba(138, 94, 18, 0.15);
+    color: var(--h1-color);
+}
+
+td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+tr:nth-child(even) td {
+    background: rgba(200, 155, 60, 0.04);
+}
+
+/* =================================================================
+   CALLOUTS: Questlog, Loot, Boss, Alliance, Horde
+   ================================================================= */
+.callout {
+    border-radius: 6px;
+    border: 1px solid var(--background-modifier-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* [!quest] / [!questlog] */
+.callout[data-callout="quest"],
+.callout[data-callout="questlog"] {
+    --callout-color: 248, 183, 0;
+    --callout-icon: help-circle;
+    border-left: 4px solid var(--wow-alliance-gold);
+    background: rgba(248, 183, 0, 0.08);
+}
+.callout[data-callout="quest"] .callout-title,
+.callout[data-callout="questlog"] .callout-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--gold-bright);
+}
+.theme-light .callout[data-callout="quest"] .callout-title,
+.theme-light .callout[data-callout="questlog"] .callout-title {
+    color: var(--h1-color);
+}
+
+/* [!loot] / [!reward] */
+.callout[data-callout="loot"],
+.callout[data-callout="reward"] {
+    --callout-color: 255, 128, 0;
+    --callout-icon: gift;
+    border-left: 4px solid var(--wow-legendary);
+    background: rgba(255, 128, 0, 0.08);
+}
+.callout[data-callout="loot"] .callout-title,
+.callout[data-callout="reward"] .callout-title {
+    font-family: var(--font-heading);
+    color: var(--wow-legendary);
+}
+
+/* [!boss] / [!raid] */
+.callout[data-callout="boss"],
+.callout[data-callout="raid"] {
+    --callout-color: 179, 27, 27;
+    --callout-icon: skull;
+    border-left: 4px solid var(--wow-horde-red);
+    background: rgba(179, 27, 27, 0.1);
+}
+.callout[data-callout="boss"] .callout-title,
+.callout[data-callout="raid"] .callout-title {
+    font-family: var(--font-heading);
+    color: #e54b4b;
+}
+
+/* [!alliance] */
+.callout[data-callout="alliance"] {
+    --callout-color: 0, 74, 152;
+    --callout-icon: shield;
+    border-left: 4px solid var(--wow-alliance-gold);
+    border-top: 1px solid var(--wow-alliance-blue);
+    background: rgba(0, 74, 152, 0.12);
+}
+.callout[data-callout="alliance"] .callout-title {
+    font-family: var(--font-heading);
+    color: var(--wow-alliance-gold);
+}
+
+/* [!horde] */
+.callout[data-callout="horde"] {
+    --callout-color: 179, 27, 27;
+    --callout-icon: flame;
+    border-left: 4px solid var(--wow-horde-red);
+    background: rgba(179, 27, 27, 0.12);
+}
+.callout[data-callout="horde"] .callout-title {
+    font-family: var(--font-heading);
+    color: #ff5252;
+}
+
+/* =================================================================
+   ITEM RARITY CALLOUTS & TAGS
+   ================================================================= */
+.callout[data-callout="common"] {
+    --callout-color: 255, 255, 255;
+    border-left: 4px solid var(--wow-common);
+}
+.callout[data-callout="uncommon"] {
+    --callout-color: 30, 255, 0;
+    border-left: 4px solid var(--wow-uncommon);
+    background: rgba(30, 255, 0, 0.08);
+}
+.callout[data-callout="rare"] {
+    --callout-color: 0, 112, 221;
+    border-left: 4px solid var(--wow-rare);
+    background: rgba(0, 112, 221, 0.08);
+}
+.callout[data-callout="epic"] {
+    --callout-color: 163, 53, 238;
+    border-left: 4px solid var(--wow-epic);
+    background: rgba(163, 53, 238, 0.08);
+}
+.callout[data-callout="legendary"] {
+    --callout-color: 255, 128, 0;
+    border-left: 4px solid var(--wow-legendary);
+    background: rgba(255, 128, 0, 0.08);
+}
+.callout[data-callout="artifact"] {
+    --callout-color: 230, 204, 128;
+    border-left: 4px solid var(--wow-artifact);
+    background: rgba(230, 204, 128, 0.08);
+}
+
+/* Glowing Rarity Tags */
+a.tag[href*="uncommon"] {
+    color: var(--wow-uncommon) !important;
+    border-color: rgba(30, 255, 0, 0.5) !important;
+    background: rgba(30, 255, 0, 0.1) !important;
+}
+a.tag[href*="rare"] {
+    color: var(--wow-rare) !important;
+    border-color: rgba(0, 112, 221, 0.5) !important;
+    background: rgba(0, 112, 221, 0.1) !important;
+}
+a.tag[href*="epic"] {
+    color: var(--wow-epic) !important;
+    border-color: rgba(163, 53, 238, 0.5) !important;
+    background: rgba(163, 53, 238, 0.1) !important;
+}
+a.tag[href*="legendary"] {
+    color: var(--wow-legendary) !important;
+    border-color: rgba(255, 128, 0, 0.5) !important;
+    background: rgba(255, 128, 0, 0.1) !important;
+}
+a.tag[href*="artifact"] {
+    color: var(--wow-artifact) !important;
+    border-color: rgba(230, 204, 128, 0.5) !important;
+    background: rgba(230, 204, 128, 0.1) !important;
+}
