@@ -1,4 +1,6 @@
-# Azeroth — World of Warcraft Interface Theme for Obsidian
+# Azeroth
+
+### World of Warcraft Interface Theme for Obsidian
 
 > *Bring the authentic World of Warcraft game interface, questlog parchment, and item tooltips to your Obsidian vault.*
 
