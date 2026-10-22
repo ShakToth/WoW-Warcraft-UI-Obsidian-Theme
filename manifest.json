@@ -1,7 +1,7 @@
 {
-    "name": "WoW - Warcraft UI",
+    "name": "Azeroth",
     "version": "1.0.0",
-    "minAppVersion": "0.15.0",
+    "minAppVersion": "1.9.0",
     "author": "ShakToth",
     "authorUrl": "https://github.com/ShakToth"
 }

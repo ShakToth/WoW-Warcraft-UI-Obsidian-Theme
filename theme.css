@@ -1,624 +1,1853 @@
-/* =================================================================
-   WoW - Warcraft UI — Authentic MMORPG Theme for Obsidian
-   Crafted with authentic Warcraft UI aesthetics:
-   - Friz Quadrata / Chiseled Fantasy Typography
-   - Golden Embossed Headings & Diamond Quest Dividers
-   - In-Game Chat Style Item Links [Item Name]
-   - Diamond Quest Objective Markers (◆)
-   - Tooltip & Dialog Framing with Gold/Bronze Filigree
-   - Item Quality / Rarity Color Tokens & Glowing Tags
-   - Parchment Questlog (Light Mode) & Dark Iron/Dungeon UI (Dark Mode)
-   
-   Author: ShakToth
-   License: MIT
-   ================================================================= */
+/* =====================================================================
+   AZEROTH — a World of Warcraft interface theme for Obsidian
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=MedievalSharp&display=swap');
+   Dark mode  · "Interface"  black-iron frames, gold trim, tooltip-navy pages
+   Light mode · "Quest Log"  parchment pages held in the same gilded frame
 
-/* =================================================================
-   ROOT: Core Warcraft Color Tokens & Fonts
-   ================================================================= */
-:root {
-    /* --- Item Rarity Tokens (Official Blizzard Hex Codes) --- */
-    --wow-poor: #9d9d9d;
-    --wow-common: #ffffff;
-    --wow-uncommon: #1eff00;
-    --wow-rare: #0070dd;
-    --wow-epic: #a335ee;
-    --wow-legendary: #ff8000;
-    --wow-artifact: #e6cc80;
-    --wow-heirloom: #00ccff;
+   ---------------------------------------------------------------------
+   Extras you can use in notes
+   ---------------------------------------------------------------------
+   Callouts
+     > [!quest] Title          parchment quest card with a yellow  !
+     > [!turnin] Title         parchment card with a yellow  ?
+     > [!gossip] Name          parchment NPC dialog
+     > [!item|epic] Name       in-game item tooltip; quality goes after |
+                               (poor common uncommon rare epic legendary
+                                artifact heirloom — German names work too)
+                               inside it: ==text== green effect line,
+                               *text* gold flavor text, ~~text~~ red text
+     > [!boss] / [!raid]       encounter journal entry
+     > [!loot] / [!reward]     loot
+     > [!achievement|10] Name  achievement toast, the number is the points
+     > [!alliance] / [!horde]  faction banners
+     > [!poor] … [!heirloom]   quality-colored callouts
+     > [!say] Name             chat lines: say yell whisper party guild
+                               officer emote system npc
+   Tasks
+     - [!] quest available   - [?] ready to turn in   - [-] abandoned
+   Tags
+     #poor … #heirloom, class names (#mage, #Magier …), #alliance, #horde
+   Inline HTML
+     <span class="q-epic">[Thunderfury]</span>   item-quality text
+     <span class="c-mage">Jaina</span>           class-colored text
+   cssclasses
+     chatlog    renders a note like the chat frame (*text* = emote color)
+   <progress value="40" max="100"></progress> is drawn as an XP bar
+   ===================================================================== */
 
-    /* --- Warcraft Metallics & Gold --- */
-    --gold-bright: #ffd100;
-    --gold-headline: #ffe285;
-    --gold-amber: #ffaa00;
-    --gold-brass: #c89b3c;
-    --gold-antique: #8a6a2a;
-    --gold-dark-trim: #4a3816;
-    --silver-iron: #9499a8;
+@import url("https://fonts.googleapis.com/css2?family=Marcellus&family=Marcellus+SC&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Archivo+Narrow:ital,wght@0,400;0,600;1,400&display=swap");
 
-    /* --- Faction Tokens --- */
-    --wow-alliance-blue: #004a98;
-    --wow-alliance-gold: #ffd100;
-    --wow-horde-red: #c41f3b;
-    --wow-horde-dark: #380d11;
+/* @settings
 
-    /* --- Typography Stacks --- */
-    --font-heading: 'Friz Quadrata', 'Friz Quadrata TT', 'LifeCraft', 'Cinzel Decorative', 'Cinzel', 'Georgia', serif;
-    --font-text: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-    --font-parchment: 'Crimson Pro', 'Georgia', 'Times New Roman', serif;
+name: Azeroth
+id: azeroth
+settings:
+  -
+    id: az-faction
+    title: Faction
+    description: Tints the frames and the main buttons.
+    type: class-select
+    allowEmpty: false
+    default: az-neutral
+    options:
+      -
+        label: Neutral (black iron and gold)
+        value: az-neutral
+      -
+        label: Alliance (navy and gold)
+        value: az-alliance
+      -
+        label: Horde (rusted iron and blood red)
+        value: az-horde
+  -
+    id: az-parchment
+    title: Quest-log pages in dark mode
+    description: Notes are drawn on parchment while the frame stays dark. Light mode always uses parchment.
+    type: class-toggle
+    default: false
+  -
+    id: az-links
+    title: Link color
+    description: Which in-game link color internal links use.
+    type: class-select
+    allowEmpty: false
+    default: az-links-spell
+    options:
+      -
+        label: Spell link (light blue)
+        value: az-links-spell
+      -
+        label: Rare item (blue)
+        value: az-links-rare
+      -
+        label: Epic item (purple)
+        value: az-links-epic
+      -
+        label: Legendary item (orange)
+        value: az-links-legendary
+      -
+        label: Quest link (yellow)
+        value: az-links-quest
+  -
+    id: az-no-brackets
+    title: Hide [brackets] around links
+    type: class-toggle
+    default: false
+  -
+    id: az-no-ornaments
+    title: Hide frame ornaments
+    description: Removes the gilded corners around the open note.
+    type: class-toggle
+    default: false
+  -
+    id: az-system-ui-font
+    title: Plain interface font
+    description: Use the system font for menus and settings instead of the Friz-style one. Headings keep the Warcraft look.
+    type: class-toggle
+    default: false
+
+*/
+
+/* =====================================================================
+   1. TOKENS — values shared by every surface
+   ===================================================================== */
+body {
+  /* Item quality, as Blizzard defines it */
+  --az-poor: #9d9d9d;
+  --az-common: #ffffff;
+  --az-uncommon: #1eff00;
+  --az-rare: #0070dd;
+  --az-epic: #a335ee;
+  --az-legendary: #ff8000;
+  --az-artifact: #e6cc80;
+  --az-heirloom: #00ccff;
+
+  /* Class colors */
+  --az-deathknight: #c41e3a;
+  --az-demonhunter: #a330c9;
+  --az-druid: #ff7c0a;
+  --az-evoker: #33937f;
+  --az-hunter: #aad372;
+  --az-mage: #3fc7eb;
+  --az-monk: #00ff98;
+  --az-paladin: #f48cba;
+  --az-priest: #ffffff;
+  --az-rogue: #fff468;
+  --az-shaman: #0070dd;
+  --az-warlock: #8788ee;
+  --az-warrior: #c69b6d;
+
+  /* Metals */
+  --az-gold: #ffd100;
+  --az-gold-hi: #fff0a0;
+  --az-gold-soft: #f2d27a;
+  --az-trim: #c8a24a;
+  --az-trim-deep: #7d6128;
+  --az-silver: #a9a9b4;
+
+  /* Black iron (the frame) */
+  --az-iron-0: #050508;
+  --az-iron-1: #0a0a10;
+  --az-iron-2: #111119;
+  --az-iron-3: #191923;
+  --az-page: #0f1019;
+  --az-page-2: #0b0c14;
+  --az-tooltip: #080918;
+
+  /* Parchment (the quest log) */
+  --az-parch-0: #f7ecd2;
+  --az-parch-1: #efdfbc;
+  --az-parch-2: #e4cfa2;
+  --az-parch-3: #d3b885;
+
+  /* Red panel button, and the faction accent used for "you are here" marks */
+  --az-cta-1: #b3170f;
+  --az-cta-2: #5e0905;
+  --az-accent: var(--az-gold);
+
+  /* Fonts — a locally installed Friz Quadrata always wins */
+  --az-font-display: "Friz Quadrata TT", "Friz Quadrata Std", "Friz Quadrata", "Marcellus", "Cinzel", Georgia, serif;
+  --az-font-caps: "Friz Quadrata TT", "Friz Quadrata Std", "Friz Quadrata", "Marcellus SC", "Marcellus", Georgia, serif;
+  --az-font-book: "Crimson Pro", "Crimson Text", Georgia, serif;
+  --az-font-chat: "Arial Narrow", "Archivo Narrow", "Roboto Condensed", Arial, sans-serif;
+
+  --font-text-theme: var(--az-font-book);
+  --font-interface-theme: var(--az-font-display);
+
+  /* Ornaments (shared by all surfaces) */
+  --az-check: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><defs><linearGradient id='g' x1='0' y1='3' x2='0' y2='15' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%23fff4b0'/><stop offset='.55' stop-color='%23ffd100'/><stop offset='1' stop-color='%23c98a00'/></linearGradient></defs><path d='M3.6 10.4 8 14.8 17.2 3.4' fill='none' stroke='%23000' stroke-opacity='.85' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/><path d='M3.6 10.4 8 14.8 17.2 3.4' fill='none' stroke='url(%23g)' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  --az-bang: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 24'><defs><linearGradient id='g' x1='0' y1='2' x2='0' y2='22' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%23fff6b8'/><stop offset='.5' stop-color='%23ffd100'/><stop offset='1' stop-color='%23d08400'/></linearGradient></defs><path d='M4.4 1.8h7.2L10 15H6z' fill='url(%23g)' stroke='%231c0f00' stroke-width='1.4' stroke-linejoin='round'/><circle cx='8' cy='19.8' r='2.6' fill='url(%23g)' stroke='%231c0f00' stroke-width='1.4'/></svg>");
+  --az-query: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 24'><defs><linearGradient id='g' x1='0' y1='2' x2='0' y2='22' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%23fff6b8'/><stop offset='.5' stop-color='%23ffd100'/><stop offset='1' stop-color='%23d08400'/></linearGradient></defs><path d='M4.6 7.4C4.6 3.2 11.6 3 11.6 7.2c0 3-3.6 3.4-3.6 7.2' fill='none' stroke='%231c0f00' stroke-width='5.4' stroke-linecap='round' stroke-linejoin='round'/><path d='M4.6 7.4C4.6 3.2 11.6 3 11.6 7.2c0 3-3.6 3.4-3.6 7.2' fill='none' stroke='url(%23g)' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/><circle cx='8' cy='19.8' r='2.6' fill='url(%23g)' stroke='%231c0f00' stroke-width='1.4'/></svg>");
+  --az-cross: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5 5l10 10M15 5 5 15' stroke='%23000' stroke-opacity='.85' stroke-width='5' stroke-linecap='round'/><path d='M5 5l10 10M15 5 5 15' stroke='%23ff2a1a' stroke-width='2.6' stroke-linecap='round'/></svg>");
+  --az-shield: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 44'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='44' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%235a3c12'/><stop offset='1' stop-color='%23201406'/></linearGradient></defs><path d='M19 2 35 7v13c0 11-8 18-16 22C11 38 3 31 3 20V7z' fill='url(%23g)' stroke='%23ffd100' stroke-width='1.6'/><path d='M19 5.5 32 9.6V20c0 9-6.4 14.8-13 18.2C12.4 34.8 6 29 6 20V9.6z' fill='none' stroke='%23c8a24a' stroke-opacity='.5'/></svg>");
+  --az-grain: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  --az-fibers: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='f' x='0' y='0' width='1' height='1'><feTurbulence type='fractalNoise' baseFrequency='.012 .42' numOctaves='3' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .38 0 0 0 0 .24 0 0 0 0 .09 0 0 0 .14 0'/></filter><filter id='s' x='0' y='0' width='1' height='1'><feTurbulence type='fractalNoise' baseFrequency='.007' numOctaves='3' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45 0 0 0 0 .27 0 0 0 0 .08 0 0 0 .55 -.27'/></filter><rect width='420' height='420' filter='url(%23f)'/><rect width='420' height='420' filter='url(%23s)'/></svg>");
+
+  /* Shape */
+  --radius-s: 3px;
+  --radius-m: 4px;
+  --radius-l: 6px;
+  --input-radius: 3px;
+  --button-radius: 3px;
+  --modal-radius: 4px;
+  --menu-radius: 4px;
+  --tooltip-radius: 4px;
+  --notice-radius: 4px;
+  --nav-item-radius: 2px;
+  --tab-radius: 3px;
+  --tab-radius-active: 6px 6px 0 0;
+  --scrollbar-radius: 2px;
+  --toggle-radius: 3px;
+  --toggle-thumb-radius: 2px;
+  --toggle-s-thumb-width: 13px;
+  --checkbox-radius: 2px;
+  --setting-items-radius: 4px;
+
+  /* Headings */
+  --h1-font: var(--az-font-display);
+  --h2-font: var(--az-font-display);
+  --h3-font: var(--az-font-display);
+  --h4-font: var(--az-font-display);
+  --h5-font: var(--az-font-caps);
+  --h6-font: var(--az-font-caps);
+  --h1-weight: 400;
+  --h2-weight: 400;
+  --h3-weight: 400;
+  --h4-weight: 400;
+  --h5-weight: 400;
+  --h6-weight: 400;
+  --h1-size: 1.8em;
+  --h2-size: 1.45em;
+  --h3-size: 1.24em;
+  --h4-size: 1.1em;
+  --h5-size: 0.95em;
+  --h6-size: 0.88em;
+  --h1-letter-spacing: 0.015em;
+  --h2-letter-spacing: 0.015em;
+  --h3-letter-spacing: 0.01em;
+  --h4-letter-spacing: 0.01em;
+  --h5-letter-spacing: 0.1em;
+  --h6-letter-spacing: 0.1em;
+  --inline-title-size: 2.05em;
+  --inline-title-margin-bottom: 0.7em;
+
+  /* Text details */
+  --bold-modifier: 250;
+  --link-decoration: none;
+  --link-decoration-hover: none;
+  --link-external-decoration: none;
+  --link-external-decoration-hover: none;
+  --link-unresolved-opacity: 1;
+  --link-unresolved-decoration-style: dotted;
+  --list-bullet-radius: 1px;
+  --list-bullet-size: 0.36em;
+  --list-bullet-transform: rotate(45deg);
+  --checklist-done-decoration: none;
+  --hr-thickness: 0px;
+  --blockquote-border-thickness: 2px;
+  --blockquote-font-style: italic;
+  --tag-radius: 4px;
+  --tag-corner-shape: bevel;
+  --tag-border-width: 1px;
+  --tag-padding-x: 0.6em;
+  --tag-padding-y: 0.12em;
+  --tag-size: 0.8em;
+  --callout-radius: 3px;
+  --callout-border-width: 1px;
+  --callout-border-opacity: 0.35;
+  --callout-padding: 10px 14px 12px 16px;
+  --callout-title-weight: 400;
+  --callout-title-size: 1.02em;
+  --table-header-font: var(--az-font-caps);
+  --table-header-weight: 400;
+  --metadata-label-font: var(--az-font-display);
+  --metadata-border-width: 1px;
+  --metadata-border-radius: 3px;
+  --metadata-padding: 6px 10px;
+  --file-header-font: var(--az-font-display);
+  --titlebar-text-weight: 400;
+  --tab-font-size: 13px;
+  --code-border-width: 1px;
+  --embed-padding: 0 0 0 var(--size-4-4);
+  --slider-thumb-border-color: #000;
+  --slider-thumb-border-width: 1px;
+  --slider-thumb-height: 16px;
+  --slider-thumb-width: 16px;
+  --slider-thumb-y: -6px;
+  --slider-thumb-background: radial-gradient(circle at 35% 30%, #fff6cf 0%, #d8b45a 55%, #6d531f 100%);
+  --slider-thumb-background-hover: radial-gradient(circle at 35% 30%, #ffffff 0%, #ffd100 55%, #7d6128 100%);
+  --scrollbar-width: 10px;
 }
 
-/* =================================================================
-   DARK MODE: The Dungeon, Raid & Character Frame UI
-   ================================================================= */
-.theme-dark {
-    /* Dark Slate & Deep Granite */
-    --bg-stone-void: #090a0d;
-    --bg-stone-deep: #101217;
-    --bg-stone-surface: #151821;
-    --bg-stone-elevated: #1d212e;
-
-    --background-primary: var(--bg-stone-deep);
-    --background-primary-alt: var(--bg-stone-void);
-    --background-secondary: var(--bg-stone-surface);
-    --background-secondary-alt: #0c0e12;
-
-    /* Borders: Metallic Brass & Inset Framing */
-    --background-modifier-border: rgba(200, 155, 60, 0.35);
-    --background-modifier-border-hover: rgba(255, 209, 0, 0.7);
-    --background-modifier-border-focus: var(--gold-bright);
-    --background-modifier-form-field: rgba(9, 10, 13, 0.9);
-    --background-modifier-box-shadow: 0 16px 42px rgba(0, 0, 0, 0.85);
-
-    /* Text: Silver & Bone-White */
-    --text-normal: #ded7cc;
-    --text-muted: #999489;
-    --text-faint: #636058;
-
-    /* Headings: Blizzard Quest Title Hierarchy */
-    --h1-color: var(--gold-bright);
-    --h2-color: #f0cf65;
-    --h3-color: #ded7cc;
-    --h4-color: var(--gold-brass);
-    --h5-color: #a8a396;
-    --h6-color: #7d786d;
-
-    /* Accents & Highlights */
-    --text-accent: var(--gold-bright);
-    --text-accent-hover: #fff073;
-    --interactive-accent: #8a6a2a;
-    --interactive-accent-hover: #c89b3c;
-    --interactive-normal: rgba(200, 155, 60, 0.1);
-    --interactive-hover: rgba(200, 155, 60, 0.22);
-
-    /* Links: Rare Item Magic Blue & Legendary Amber */
-    --link-color: #0070dd;
-    --link-color-hover: #4ba6ff;
-    --link-external-color: var(--wow-legendary);
-    --link-external-color-hover: #ffad33;
-    --text-highlight-bg: rgba(255, 209, 0, 0.3);
-    --text-selection: rgba(200, 155, 60, 0.45);
-
-    /* Code Blocks */
-    --code-normal: var(--wow-artifact);
-    --code-background: #08090c;
-
-    /* Tags: Golden Pill Badges */
-    --tag-color: var(--gold-bright);
-    --tag-background: rgba(200, 155, 60, 0.16);
-    --tag-background-hover: rgba(255, 209, 0, 0.28);
-    --tag-border-color: rgba(200, 155, 60, 0.5);
-    --tag-border-color-hover: var(--gold-bright);
-
-    /* Tabs & Navigation */
-    --tab-text-color: var(--text-muted);
-    --tab-text-color-active: var(--gold-bright);
-    --tab-text-color-focused-active: var(--gold-bright);
-    --nav-item-color: var(--text-muted);
-    --nav-item-color-hover: var(--text-normal);
-    --nav-item-color-active: var(--gold-bright);
-    --nav-item-background-hover: rgba(200, 155, 60, 0.14);
-    --nav-item-background-active: rgba(200, 155, 60, 0.25);
-
-    /* Scrollbars */
-    --scrollbar-bg: #090a0d;
-    --scrollbar-thumb-bg: rgba(200, 155, 60, 0.38);
-
-    /* Status Bar */
-    --status-bar-background: #0a0b0e;
-    --status-bar-border-color: rgba(200, 155, 60, 0.3);
-    --status-bar-text-color: var(--text-faint);
+/* Faction tints */
+body.az-alliance {
+  --az-iron-0: #04060c;
+  --az-iron-1: #080c17;
+  --az-iron-2: #0e1423;
+  --az-iron-3: #151d31;
+  --az-page: #0c111e;
+  --az-page-2: #090d18;
+  --az-cta-1: #1f5fc4;
+  --az-cta-2: #0a2560;
+  --az-accent: #3d86ff;
+}
+body.az-horde {
+  --az-iron-0: #080404;
+  --az-iron-1: #100908;
+  --az-iron-2: #190f0d;
+  --az-iron-3: #241512;
+  --az-page: #130e0d;
+  --az-page-2: #0f0b0a;
+  --az-trim: #b98a44;
+  --az-trim-deep: #6e4a22;
+  --az-cta-1: #b3170f;
+  --az-cta-2: #4a0603;
+  --az-accent: #e0301e;
 }
 
-.theme-dark .app-container {
-    background:
-        radial-gradient(ellipse 65% 30% at 50% -5%, rgba(255, 209, 0, 0.1), transparent 70%),
-        radial-gradient(ellipse 75% 35% at 50% 105%, rgba(196, 31, 59, 0.12), transparent 70%),
-        var(--bg-stone-deep);
+body.az-system-ui-font {
+  --font-interface-theme: var(--font-default);
 }
 
-/* =================================================================
-   LIGHT MODE: The Questlog & Spellbook Parchment
-   ================================================================= */
-.theme-light {
-    --parchment-bright: #fffdf5;
-    --parchment-base: #f4ecd8;
-    --parchment-aged: #ebdcc0;
-    --parchment-shadow: #d4bf9c;
+/* =====================================================================
+   2. SURFACES
+   Every surface re-declares the variables Obsidian reads, so that a
+   dark frame can hold a parchment page and the other way round.
+   ===================================================================== */
 
-    --background-primary: var(--parchment-base);
-    --background-primary-alt: var(--parchment-bright);
-    --background-secondary: var(--parchment-aged);
-    --background-secondary-alt: var(--parchment-shadow);
+/* ---- Black iron: dark mode everywhere, and the frame in light mode ---- */
+body.theme-dark,
+body.theme-light .titlebar,
+body.theme-light .workspace-ribbon,
+body.theme-light .workspace-split.mod-left-split,
+body.theme-light .workspace-split.mod-right-split,
+body.theme-light .workspace-split.mod-root .workspace-tab-header-container,
+body.theme-light .status-bar,
+body.theme-dark.az-parchment .workspace-split.mod-root .workspace-tab-header-container {
+  color-scheme: dark;
+  color: var(--text-normal);
+  --mono-0: black;
+  --mono-100: white;
+  --highlight-mix-blend-mode: lighten;
 
-    /* Antique Brass & Wax Seals */
-    --wax-seal: #8c1b1b;
-    --ink-dark: #241a12;
-    --antique-gold: #8a5e12;
-    --antique-border: rgba(138, 94, 18, 0.38);
+  --color-base-00: var(--az-page);
+  --color-base-05: var(--az-page-2);
+  --color-base-10: var(--az-iron-2);
+  --color-base-20: var(--az-iron-1);
+  --color-base-25: var(--az-iron-3);
+  --color-base-30: #25252f;
+  --color-base-35: #30303c;
+  --color-base-40: #4b4856;
+  --color-base-50: #6f6a60;
+  --color-base-60: #8f897d;
+  --color-base-70: #aaa396;
+  --color-base-100: #e8e1d3;
 
-    --background-modifier-border: var(--antique-border);
-    --background-modifier-border-hover: rgba(138, 94, 18, 0.8);
-    --background-modifier-border-focus: var(--antique-gold);
-    --background-modifier-form-field: rgba(255, 253, 245, 0.95);
-    --background-modifier-box-shadow: 0 10px 32px rgba(60, 40, 20, 0.25);
+  --color-red: #ff4a4a;
+  --color-orange: #ff8000;
+  --color-yellow: #ffd100;
+  --color-green: #45d845;
+  --color-cyan: #00ccff;
+  --color-blue: #4a9eff;
+  --color-purple: #b866f7;
+  --color-pink: #ff80ff;
+  --color-red-rgb: 255, 74, 74;
+  --color-orange-rgb: 255, 128, 0;
+  --color-yellow-rgb: 255, 209, 0;
+  --color-green-rgb: 69, 216, 69;
+  --color-cyan-rgb: 0, 204, 255;
+  --color-blue-rgb: 74, 158, 255;
+  --color-purple-rgb: 184, 102, 247;
+  --color-pink-rgb: 255, 128, 255;
+  --color-accent: var(--az-gold);
+  --color-accent-1: var(--az-gold);
+  --color-accent-2: var(--az-gold-hi);
 
-    /* Typography: Dark Iron Gall Ink */
-    --text-normal: var(--ink-dark);
-    --text-muted: #59432f;
-    --text-faint: #856e58;
+  --background-primary: var(--az-page);
+  --background-primary-alt: var(--az-page-2);
+  --background-secondary: var(--az-iron-1);
+  --background-secondary-alt: var(--az-iron-2);
+  --background-modifier-hover: rgba(255, 226, 160, 0.06);
+  --background-modifier-active-hover: rgba(255, 209, 0, 0.1);
+  --background-modifier-border: color-mix(in srgb, var(--az-trim) 22%, transparent);
+  --background-modifier-border-hover: color-mix(in srgb, var(--az-trim) 45%, transparent);
+  --background-modifier-border-focus: var(--az-gold);
+  --background-modifier-form-field: #07070c;
+  --background-modifier-form-field-hover: #0a0a11;
+  --background-modifier-box-shadow: rgba(0, 0, 0, 0.6);
+  --background-modifier-cover: rgba(3, 3, 8, 0.72);
+  --background-modifier-message: rgba(8, 9, 24, 0.96);
+  --background-modifier-error: #b3170f;
+  --background-modifier-success: #2f9a2f;
 
-    /* Headings: Deep Crimson & Wax Gold */
-    --h1-color: #731414;
-    --h2-color: var(--antique-gold);
-    --h3-color: #3b2514;
-    --h4-color: #543a22;
-    --h5-color: #694b32;
-    --h6-color: #785a40;
+  --text-normal: #e8e1d3;
+  --text-muted: #aaa396;
+  --text-faint: #6f6a60;
+  --text-accent: var(--az-gold);
+  --text-accent-hover: var(--az-gold-hi);
+  --text-on-accent: #170f00;
+  --text-on-accent-inverted: #ffffff;
+  --text-error: #ff4040;
+  --text-warning: #ff8000;
+  --text-success: #45d845;
+  --text-selection: color-mix(in srgb, var(--az-trim) 34%, transparent);
+  --text-highlight-bg: rgba(255, 209, 0, 0.2);
+  --interactive-normal: var(--az-iron-3);
+  --interactive-hover: #23232f;
+  --interactive-accent: var(--az-trim);
+  --interactive-accent-hover: var(--az-gold);
+  --caret-color: var(--az-gold);
+  --icon-color: #aaa396;
+  --icon-color-hover: #e8e1d3;
+  --icon-color-active: var(--az-gold);
+  --icon-color-focused: var(--az-gold-soft);
 
-    /* Accents & Links */
-    --text-accent: var(--antique-gold);
-    --text-accent-hover: #b07a1a;
-    --interactive-accent: var(--wax-seal);
-    --interactive-accent-hover: #a82020;
-    --interactive-normal: rgba(138, 94, 18, 0.1);
-    --interactive-hover: rgba(138, 94, 18, 0.2);
+  --h1-color: var(--az-gold);
+  --h2-color: #f6c343;
+  --h3-color: #ffffff;
+  --h4-color: var(--az-gold-soft);
+  --h5-color: var(--az-trim);
+  --h6-color: #8f897d;
+  --bold-color: #ffffff;
+  --heading-formatting: #5f5a52;
 
-    --link-color: #174880;
-    --link-color-hover: #2264b3;
-    --link-external-color: var(--wax-seal);
-    --link-external-color-hover: #b02424;
-    --text-highlight-bg: rgba(255, 209, 0, 0.4);
-    --text-selection: rgba(212, 175, 55, 0.4);
+  --link-color: var(--az-q-spell);
+  --link-color-hover: #c4efff;
+  --link-external-color: var(--az-q-legendary);
+  --link-external-color-hover: #ffb366;
+  --link-unresolved-color: var(--az-q-poor);
+  --link-unresolved-decoration-color: rgba(157, 157, 157, 0.55);
 
-    /* Code Blocks */
-    --code-normal: #4a2c0f;
-    --code-background: #ede0c2;
+  --list-marker-color: var(--az-gold-soft);
+  --list-marker-color-hover: var(--az-gold);
+  --list-marker-color-collapsed: var(--az-gold);
+  --collapse-icon-color: color-mix(in srgb, var(--az-trim) 70%, transparent);
+  --collapse-icon-color-collapsed: var(--az-gold);
+  --indentation-guide-color: color-mix(in srgb, var(--az-trim) 14%, transparent);
+  --indentation-guide-color-active: color-mix(in srgb, var(--az-trim) 40%, transparent);
+  --checklist-done-color: var(--az-q-poor);
+  --checkbox-border-color: color-mix(in srgb, var(--az-trim) 55%, #000);
+  --checkbox-border-color-hover: var(--az-gold);
+  --checkbox-color: #07070c;
+  --checkbox-color-hover: #07070c;
 
-    /* Tags */
-    --tag-color: #731414;
-    --tag-background: rgba(138, 94, 18, 0.14);
-    --tag-background-hover: rgba(138, 94, 18, 0.25);
-    --tag-border-color: rgba(138, 94, 18, 0.45);
-    --tag-border-color-hover: #731414;
+  --blockquote-border-color: var(--az-trim);
+  --blockquote-color: #f0d68e;
+  --blockquote-background-color: color-mix(in srgb, var(--az-trim) 5%, transparent);
+  --embed-border-start: 2px solid color-mix(in srgb, var(--az-trim) 55%, transparent);
+  --embed-background: color-mix(in srgb, var(--az-trim) 3%, transparent);
 
-    /* Tabs & Navigation */
-    --tab-text-color: var(--text-muted);
-    --tab-text-color-active: var(--wax-seal);
-    --tab-text-color-focused-active: var(--wax-seal);
-    --nav-item-color: var(--text-muted);
-    --nav-item-color-hover: var(--text-normal);
-    --nav-item-color-active: var(--wax-seal);
-    --nav-item-background-hover: rgba(138, 94, 18, 0.12);
-    --nav-item-background-active: rgba(138, 94, 18, 0.22);
+  --code-background: rgba(0, 0, 0, 0.38);
+  --code-border-color: color-mix(in srgb, var(--az-trim) 16%, transparent);
+  --code-normal: var(--az-artifact);
+  --code-comment: #7d796f;
+  --code-function: var(--az-gold);
+  --code-important: var(--az-legendary);
+  --code-keyword: var(--az-mage);
+  --code-operator: var(--az-paladin);
+  --code-property: var(--az-warlock);
+  --code-punctuation: #aaa396;
+  --code-string: var(--az-hunter);
+  --code-tag: #ef5a72;
+  --code-value: var(--az-druid);
 
-    /* Scrollbars */
-    --scrollbar-bg: var(--parchment-aged);
-    --scrollbar-thumb-bg: rgba(138, 94, 18, 0.4);
+  --table-border-color: color-mix(in srgb, var(--az-trim) 26%, transparent);
+  --table-header-background: color-mix(in srgb, var(--az-trim) 11%, transparent);
+  --table-header-color: var(--az-gold);
+  --table-row-alt-background: rgba(255, 255, 255, 0.018);
+  --table-row-background-hover: rgba(255, 209, 0, 0.05);
+  --table-row-alt-background-hover: rgba(255, 209, 0, 0.05);
 
-    /* Status Bar */
-    --status-bar-background: var(--parchment-aged);
-    --status-bar-border-color: var(--antique-border);
-    --status-bar-text-color: var(--text-faint);
+  --metadata-background: color-mix(in srgb, var(--az-trim) 4%, transparent);
+  --metadata-border-color: color-mix(in srgb, var(--az-trim) 22%, transparent);
+  --metadata-label-text-color: var(--az-gold-soft);
+  --metadata-label-text-color-hover: var(--az-gold);
+
+  --nav-item-color: #c4bcad;
+  --nav-item-color-hover: #ffffff;
+  --nav-item-color-active: #ffffff;
+  --nav-item-color-selected: #ffffff;
+  --nav-item-background-hover: rgba(150, 175, 255, 0.08);
+  --nav-item-background-active: transparent;
+  --nav-item-background-selected: rgba(255, 209, 0, 0.12);
+  --nav-heading-color: var(--az-gold-soft);
+  --nav-collapse-icon-color: color-mix(in srgb, var(--az-trim) 70%, transparent);
+  --nav-indentation-guide-color: color-mix(in srgb, var(--az-trim) 14%, transparent);
+
+  --tab-container-background: var(--az-iron-1);
+  --tab-background-active: var(--az-page);
+  --tab-outline-color: color-mix(in srgb, var(--az-trim) 45%, transparent);
+  --tab-divider-color: color-mix(in srgb, var(--az-trim) 25%, transparent);
+  --tab-text-color: #8f897d;
+  --tab-text-color-active: #d9d1c2;
+  --tab-text-color-focused: #a9a294;
+  --tab-text-color-focused-active: #e8e1d3;
+  --tab-text-color-focused-active-current: var(--az-gold);
+  --tab-text-color-focused-highlighted: var(--az-gold);
+  --titlebar-background: var(--az-iron-0);
+  --titlebar-background-focused: var(--az-iron-0);
+  --titlebar-text-color: #8f897d;
+  --titlebar-text-color-focused: var(--az-gold-soft);
+  --ribbon-background: var(--az-iron-0);
+  --ribbon-background-collapsed: var(--az-iron-0);
+  --divider-color: color-mix(in srgb, var(--az-trim) 26%, transparent);
+  --divider-color-hover: var(--az-gold);
+  --status-bar-background: var(--az-iron-1);
+  --status-bar-border-color: color-mix(in srgb, var(--az-trim) 40%, transparent);
+  --status-bar-text-color: #8f897d;
+
+  --modal-background: var(--az-iron-2);
+  --modal-border-color: var(--az-trim);
+  --prompt-border-color: var(--az-trim);
+  --setting-items-background: var(--az-iron-1);
+  --setting-items-border-color: color-mix(in srgb, var(--az-trim) 18%, transparent);
+  --setting-items-divider-color: color-mix(in srgb, var(--az-trim) 12%, transparent);
+  --setting-group-heading-color: var(--az-gold);
+  --dropdown-background: var(--az-iron-3);
+  --dropdown-background-hover: #23232f;
+  --input-shadow: inset 0 0 0 1px color-mix(in srgb, var(--az-trim) 30%, transparent), inset 0 1px 4px rgba(0, 0, 0, 0.7);
+  --input-shadow-hover: inset 0 0 0 1px color-mix(in srgb, var(--az-trim) 60%, transparent), inset 0 1px 4px rgba(0, 0, 0, 0.7);
+  --scrollbar-thumb-bg: color-mix(in srgb, var(--az-trim) 30%, transparent);
+  --scrollbar-active-thumb-bg: color-mix(in srgb, var(--az-gold) 60%, transparent);
+  --scrollbar-bg: transparent;
+  --slider-track-background: color-mix(in srgb, var(--az-trim) 25%, #000);
+  --slider-fill-background: var(--az-trim);
+  --toggle-thumb-color: #e6d39a;
+
+  --graph-text: #e8e1d3;
+  --graph-line: color-mix(in srgb, var(--az-trim) 32%, transparent);
+  --graph-node: var(--az-trim);
+  --graph-node-unresolved: #5d5850;
+  --graph-node-focused: var(--az-gold);
+  --graph-node-tag: var(--az-q-epic);
+  --graph-node-attachment: var(--az-uncommon);
+  --canvas-background: var(--az-page);
+  --canvas-dot-pattern: color-mix(in srgb, var(--az-trim) 22%, transparent);
+  --canvas-color-1: #e03a3a;
+  --canvas-color-2: var(--az-legendary);
+  --canvas-color-3: var(--az-gold);
+  --canvas-color-4: #3fd23f;
+  --canvas-color-5: var(--az-heirloom);
+  --canvas-color-6: var(--az-q-epic);
+
+  --callout-default: var(--az-q-rare);
+  --callout-info: var(--az-q-rare);
+  --callout-todo: var(--az-q-rare);
+  --callout-summary: var(--az-heirloom);
+  --callout-important: var(--az-artifact);
+  --callout-tip: var(--az-uncommon);
+  --callout-success: var(--az-uncommon);
+  --callout-question: var(--az-gold);
+  --callout-warning: var(--az-legendary);
+  --callout-fail: var(--az-red);
+  --callout-error: var(--az-red);
+  --callout-bug: var(--az-red);
+  --callout-example: var(--az-q-epic);
+  --callout-quote: var(--az-poor);
+
+  /* Theme-specific skin */
+  --az-folder: var(--az-gold-soft);
+  --az-h-shadow: 0 1px 0 #000, 0 0 1px #000, 0 2px 8px rgba(0, 0, 0, 0.75);
+  --az-h-shadow-soft: 0 1px 1px rgba(0, 0, 0, 0.9);
+  --az-rule: color-mix(in srgb, var(--az-trim) 70%, transparent);
+  --az-rule-strong: var(--az-gold);
+  --az-tag-base: var(--az-trim);
+  --az-tag-text: var(--az-gold-soft);
+  --az-btn-text: var(--az-gold);
+  --az-btn-top: #2a2620;
+  --az-btn-bottom: #13110e;
+  --az-list-number: var(--az-gold-soft);
+  --az-chat-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+  --az-chat-frame: rgba(0, 0, 0, 0.32);
+  --az-highlight-sel: rgba(255, 209, 0, 0.16);
+  --az-page-tex: radial-gradient(140% 70% at 50% -22%, rgba(255, 209, 0, 0.05), transparent 58%), radial-gradient(130% 90% at 50% 125%, rgba(0, 0, 0, 0.5), transparent 62%);
+  --az-gem: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M6 .8 11.2 6 6 11.2.8 6z' fill='%23140e04' stroke='%23e9b824' stroke-width='1.1'/><path d='M6 3.6 8.4 6 6 8.4 3.6 6z' fill='%23ffd100'/></svg>");
+  --az-hr: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 16'><path d='M0 8h12M52 8h12' stroke='%23c8a24a'/><path d='M17 8l3-3 3 3-3 3zM41 8l3-3 3 3-3 3z' fill='%23c8a24a'/><path d='M32 1.5 38.5 8 32 14.5 25.5 8z' fill='%23140e04' stroke='%23ffd100' stroke-width='1.2'/><path d='M32 5 35 8 32 11 29 8z' fill='%23ffd100'/></svg>");
+  --az-corner-tl: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='%23c8a24a'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%23ffd100' stroke='%23140e04' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%23c8a24a'/></svg>");
+  --az-corner-tr: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g transform='matrix(-1 0 0 1 40 0)'><g fill='none' stroke='%23c8a24a'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%23ffd100' stroke='%23140e04' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%23c8a24a'/></g></svg>");
+  --az-corner-bl: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g transform='matrix(1 0 0 -1 0 40)'><g fill='none' stroke='%23c8a24a'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%23ffd100' stroke='%23140e04' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%23c8a24a'/></g></svg>");
+  --az-corner-br: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g transform='matrix(-1 0 0 -1 40 40)'><g fill='none' stroke='%23c8a24a'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%23ffd100' stroke='%23140e04' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%23c8a24a'/></g></svg>");
 }
 
-.theme-light .cm-scroller,
-.theme-light .markdown-preview-view {
-    font-family: var(--font-parchment);
-    font-size: 1.05rem;
-    line-height: 1.7;
+/* ---- Iron and tooltip share the bright, in-game text colors ---- */
+body.theme-dark,
+body.theme-light .titlebar,
+body.theme-light .workspace-ribbon,
+body.theme-light .workspace-split.mod-left-split,
+body.theme-light .workspace-split.mod-right-split,
+body.theme-light .workspace-split.mod-root .workspace-tab-header-container,
+body.theme-light .status-bar,
+.menu,
+.tooltip,
+.notice,
+.suggestion-container,
+.callout[data-callout="item"],
+.callout[data-callout="tooltip"] {
+  --az-q-poor: #9d9d9d;
+  --az-q-common: #ffffff;
+  --az-q-uncommon: #1eff00;
+  --az-q-rare: #2b8af7;
+  --az-q-epic: #b866f7;
+  --az-q-legendary: #ff8000;
+  --az-q-artifact: #e6cc80;
+  --az-q-heirloom: #00ccff;
+  --az-q-spell: #71d5ff;
+  --az-q-quest: #ffff00;
+  --az-red: #ff3b3b;
+  --az-flavor: var(--az-gold);
+  --az-equip: var(--az-uncommon);
+  --az-chat-say: #ffffff;
+  --az-chat-yell: #ff4040;
+  --az-chat-whisper: #ff80ff;
+  --az-chat-party: #aaaaff;
+  --az-chat-guild: #40ff40;
+  --az-chat-officer: #40c040;
+  --az-chat-emote: #ff8040;
+  --az-chat-system: #ffff00;
+  --az-chat-npc: #fffb9f;
+  --az-alliance-c: #4a8cff;
+  --az-horde-c: #ff3b30;
+  --az-shaman-c: #2b8af7;
+  --az-tint: 20%;
 }
 
-/* =================================================================
-   TYPOGRAPHY: Embossed Headings & Chiseled Fonts
-   ================================================================= */
-h1, h2, h3, h4, h5, h6,
-.inline-title,
-.markdown-rendered h1,
-.markdown-rendered h2,
-.markdown-rendered h3,
-.markdown-rendered h4 {
-    font-family: var(--font-heading);
-    letter-spacing: 0.04em;
-    font-weight: 700;
-}
-
-/* H1: The Classic Golden Quest Header */
-.theme-dark h1,
-.theme-dark .inline-title,
-.theme-dark .markdown-rendered h1,
-.theme-dark .cm-header-1 {
-    color: var(--gold-bright);
-    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 3px 6px rgba(0, 0, 0, 0.9);
-    border-bottom: 2px solid;
-    border-image: linear-gradient(90deg, #c89b3c 0%, #ffd100 25%, #c89b3c 60%, transparent 100%) 1;
-    padding-bottom: 0.35em;
-    margin-top: 1.2em;
-}
-
-.theme-light h1,
-.theme-light .inline-title,
-.theme-light .markdown-rendered h1,
-.theme-light .cm-header-1 {
-    color: var(--h1-color);
-    border-bottom: 2px solid;
-    border-image: linear-gradient(90deg, #8a5e12 0%, #731414 40%, transparent 100%) 1;
-    padding-bottom: 0.35em;
-    margin-top: 1.2em;
-}
-
-/* H2 & H3 Subtitles */
-.theme-dark h2,
-.theme-dark .markdown-rendered h2,
-.theme-dark .cm-header-2 {
-    color: var(--h2-color);
-    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 2px 4px rgba(0, 0, 0, 0.8);
-    border-bottom: 1px dashed rgba(200, 155, 60, 0.4);
-    padding-bottom: 0.2em;
-    margin-top: 1.1em;
-}
-
-.theme-dark h3,
-.theme-dark .markdown-rendered h3,
-.theme-dark .cm-header-3 {
-    color: var(--h3-color);
-    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-/* =================================================================
-   WARCRAFT DIVIDERS: Golden Filigree with Center Diamond (◆)
-   ================================================================= */
-.markdown-rendered hr {
-    border: none;
-    height: 2px;
-    background: linear-gradient(90deg, transparent 0%, #c89b3c 20%, #ffd100 50%, #c89b3c 80%, transparent 100%);
-    position: relative;
-    margin: 2.2em 0;
-    box-shadow: 0 0 6px rgba(255, 209, 0, 0.4);
-}
-
-.markdown-rendered hr::after {
-    content: '◆';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--gold-bright);
-    background: var(--background-primary);
-    padding: 0 8px;
-    font-size: 13px;
-    text-shadow: 0 0 8px rgba(255, 209, 0, 0.8);
-}
-
-.theme-light .markdown-rendered hr {
-    background: linear-gradient(90deg, transparent 0%, #8a5e12 25%, #731414 50%, #8a5e12 75%, transparent 100%);
-    box-shadow: none;
-}
-.theme-light .markdown-rendered hr::after {
-    color: #731414;
-    text-shadow: none;
-}
-
-/* =================================================================
-   QUEST OBJECTIVE BULLETS: Golden Diamond Markers (◆)
-   ================================================================= */
-.theme-dark .markdown-rendered ul > li::marker,
-.theme-dark .cm-formatting-list-ul {
-    content: '◆ ';
-    color: var(--gold-bright);
-    font-size: 0.8em;
-    text-shadow: 0 0 5px rgba(255, 209, 0, 0.7);
-}
-
-.theme-light .markdown-rendered ul > li::marker,
-.theme-light .cm-formatting-list-ul {
-    content: '◆ ';
-    color: var(--h1-color);
-    font-size: 0.8em;
-}
-
-.theme-dark .markdown-rendered ol > li::marker,
-.theme-dark .cm-formatting-list-ol {
-    color: var(--gold-bright);
-    font-family: var(--font-heading);
-    font-weight: 700;
-}
-
-/* Checkboxes (Quest Objectives) */
-.markdown-rendered input[type="checkbox"]:checked,
-.cm-task-checkbox[data-task="x"] {
-    background-color: var(--gold-antique);
-    border-color: var(--gold-bright);
-    box-shadow: 0 0 6px rgba(255, 209, 0, 0.6);
-}
-
-/* =================================================================
-   IN-GAME CHAT ITEM LINKS: [Link Name]
-   ================================================================= */
-.internal-link {
-    color: var(--link-color);
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.15s ease;
-}
-
-.internal-link::before {
-    content: '[';
-    color: rgba(200, 155, 60, 0.7);
-    font-weight: 400;
-}
-
-.internal-link::after {
-    content: ']';
-    color: rgba(200, 155, 60, 0.7);
-    font-weight: 400;
-}
-
-.internal-link:hover {
-    color: var(--gold-bright);
-    text-shadow: 0 0 8px rgba(255, 209, 0, 0.8);
-}
-.internal-link:hover::before,
-.internal-link:hover::after {
-    color: var(--gold-bright);
-}
-
-/* =================================================================
-   UI FRAMES: Beveled Action Buttons, Modals & Tabs
-   ================================================================= */
-/* Active Workspace Tab */
-.mod-root .workspace-tabs .workspace-tab-header.is-active {
-    border-top: 3px solid var(--gold-bright);
-    background: var(--background-primary);
-    box-shadow: inset 0 3px 8px rgba(255, 209, 0, 0.25);
-}
-
-.workspace-tab-header {
-    border-radius: 6px 6px 0 0;
-    font-family: var(--font-heading);
-    font-size: 0.88em;
-    letter-spacing: 0.03em;
-}
-
-/* Buttons (Classic WoW Metallic Action Bar Button) */
-button.mod-cta {
-    background: linear-gradient(180deg, #a88032 0%, #614618 60%, #3d2b0e 100%);
-    color: #fff9e6;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-shadow: 0 1px 2px #000;
-    border: 1px solid var(--gold-bright);
-    border-radius: 4px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 3px 8px rgba(0, 0, 0, 0.6);
-    transition: all 0.15s ease;
-}
-
-button.mod-cta:hover {
-    background: linear-gradient(180deg, #d4a742 0%, #876222 60%, #523b14 100%);
-    box-shadow: 0 0 12px rgba(255, 209, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    color: #ffffff;
-    cursor: pointer;
-}
-
-/* Modals & Dialog Frames (Blizzard NPC Dialog Box) */
-.modal, .popover, .menu {
-    border: 2px solid var(--gold-brass);
-    outline: 1px solid rgba(0, 0, 0, 0.8);
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 209, 0, 0.35);
-    border-radius: 6px;
-    background: var(--background-secondary);
-}
-
-/* =================================================================
-   TABLES: Beveled Loot & Character Stats Table
-   ================================================================= */
-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    border: 1px solid var(--gold-brass);
-    border-radius: 5px;
-    margin: 1.4em 0;
-    width: 100%;
-    overflow: hidden;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-}
-
-th {
-    background: linear-gradient(180deg, rgba(200, 155, 60, 0.25) 0%, rgba(200, 155, 60, 0.1) 100%);
-    font-family: var(--font-heading);
-    color: var(--gold-bright);
-    text-shadow: 0 1px 2px #000;
-    padding: 10px 14px;
-    border-bottom: 2px solid var(--gold-brass);
-    text-transform: uppercase;
-    font-size: 0.85em;
-    letter-spacing: 0.05em;
-}
-
-.theme-light th {
-    background: rgba(138, 94, 18, 0.18);
-    color: var(--h1-color);
-    text-shadow: none;
-}
-
-td {
-    padding: 9px 14px;
-    border-bottom: 1px solid rgba(200, 155, 60, 0.18);
-}
-
-tr:nth-child(even) td {
-    background: rgba(200, 155, 60, 0.05);
-}
-
-/* =================================================================
-   CALLOUTS: Quest, Loot, Boss, Alliance & Horde
-   ================================================================= */
-.callout {
-    border-radius: 6px;
-    border: 1px solid var(--background-modifier-border);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
-    margin: 1.4em 0;
-}
-
-/* [!quest] / [!questlog] */
+/* ---- Parchment: light mode, or dark mode with "quest-log pages" ---- */
+body.theme-light,
+body.theme-dark.az-parchment .workspace-split.mod-root,
+body.theme-dark.az-parchment .popover.hover-popover,
 .callout[data-callout="quest"],
-.callout[data-callout="questlog"] {
-    --callout-color: 255, 209, 0;
-    --callout-icon: help-circle;
-    border: 2px solid var(--gold-brass);
-    border-left: 6px solid var(--gold-bright);
-    background: linear-gradient(90deg, rgba(255, 209, 0, 0.12) 0%, rgba(200, 155, 60, 0.04) 100%);
-}
-.callout[data-callout="quest"] .callout-title,
-.callout[data-callout="questlog"] .callout-title {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    color: var(--gold-bright);
-    letter-spacing: 0.04em;
-    text-shadow: 0 1px 2px #000;
-}
-.theme-light .callout[data-callout="quest"] .callout-title,
-.theme-light .callout[data-callout="questlog"] .callout-title {
-    color: var(--h1-color);
-    text-shadow: none;
+.callout[data-callout="questlog"],
+.callout[data-callout="turnin"],
+.callout[data-callout="complete"],
+.callout[data-callout="gossip"] {
+  color-scheme: light;
+  color: var(--text-normal);
+  --mono-0: white;
+  --mono-100: black;
+  --highlight-mix-blend-mode: darken;
+
+  --color-base-00: var(--az-parch-1);
+  --color-base-05: var(--az-parch-0);
+  --color-base-10: var(--az-parch-0);
+  --color-base-20: var(--az-parch-2);
+  --color-base-25: var(--az-parch-2);
+  --color-base-30: #d8c296;
+  --color-base-35: #cbb184;
+  --color-base-40: #b0956a;
+  --color-base-50: #8a7556;
+  --color-base-60: #6e5a3f;
+  --color-base-70: #5d4930;
+  --color-base-100: #2b1d0e;
+
+  --color-red: #b3170f;
+  --color-orange: #b35300;
+  --color-yellow: #8a6d00;
+  --color-green: #2a7a1a;
+  --color-cyan: #00718f;
+  --color-blue: #1d5fa8;
+  --color-purple: #6b20b0;
+  --color-pink: #a3207f;
+  --color-red-rgb: 179, 23, 15;
+  --color-orange-rgb: 179, 83, 0;
+  --color-yellow-rgb: 138, 109, 0;
+  --color-green-rgb: 42, 122, 26;
+  --color-cyan-rgb: 0, 113, 143;
+  --color-blue-rgb: 29, 95, 168;
+  --color-purple-rgb: 107, 32, 176;
+  --color-pink-rgb: 163, 32, 127;
+  --color-accent: #7a4f14;
+  --color-accent-1: #7a4f14;
+  --color-accent-2: #9a6518;
+
+  --background-primary: var(--az-parch-1);
+  --background-primary-alt: var(--az-parch-0);
+  --background-secondary: var(--az-parch-2);
+  --background-secondary-alt: var(--az-parch-3);
+  --background-modifier-hover: rgba(110, 70, 20, 0.08);
+  --background-modifier-active-hover: rgba(110, 70, 20, 0.14);
+  --background-modifier-border: rgba(110, 70, 20, 0.24);
+  --background-modifier-border-hover: rgba(110, 70, 20, 0.45);
+  --background-modifier-border-focus: #7a4f14;
+  --background-modifier-form-field: #f8f0dc;
+  --background-modifier-form-field-hover: #fbf4e4;
+  --background-modifier-box-shadow: rgba(60, 35, 10, 0.25);
+  --background-modifier-cover: rgba(20, 12, 4, 0.55);
+  --background-modifier-error: #b3170f;
+  --background-modifier-success: #2a7a1a;
+
+  --text-normal: #2b1d0e;
+  --text-muted: #5d4930;
+  --text-faint: #8a7556;
+  --text-accent: #7a4f14;
+  --text-accent-hover: #a35f0e;
+  --text-on-accent: #fff6dc;
+  --text-on-accent-inverted: #2b1d0e;
+  --text-error: #b3170f;
+  --text-warning: #b35300;
+  --text-success: #2a7a1a;
+  --text-selection: rgba(160, 110, 30, 0.26);
+  --text-highlight-bg: rgba(255, 186, 0, 0.36);
+  --interactive-normal: #e9d8b0;
+  --interactive-hover: #e2cd9f;
+  --interactive-accent: #7a4f14;
+  --interactive-accent-hover: #9a6518;
+  --caret-color: #7a2410;
+  --icon-color: #6e5a3f;
+  --icon-color-hover: #2b1d0e;
+  --icon-color-active: #7a2410;
+  --icon-color-focused: #2b1d0e;
+
+  --h1-color: #3a1d06;
+  --h2-color: #6e2410;
+  --h3-color: #2b1d0e;
+  --h4-color: #7a4f14;
+  --h5-color: #7a4f14;
+  --h6-color: #8a7556;
+  --bold-color: #1c1206;
+  --heading-formatting: #b0956a;
+
+  --link-color: var(--az-q-spell);
+  --link-color-hover: #0a3f75;
+  --link-external-color: var(--az-q-legendary);
+  --link-external-color-hover: #803a00;
+  --link-unresolved-color: var(--az-q-poor);
+  --link-unresolved-decoration-color: rgba(110, 102, 90, 0.6);
+
+  --list-marker-color: #8a5a18;
+  --list-marker-color-hover: #6e2410;
+  --list-marker-color-collapsed: #6e2410;
+  --collapse-icon-color: #a0855a;
+  --collapse-icon-color-collapsed: #6e2410;
+  --indentation-guide-color: rgba(110, 70, 20, 0.16);
+  --indentation-guide-color-active: rgba(110, 70, 20, 0.4);
+  --checklist-done-color: #7d7466;
+  --checkbox-border-color: #6e4a1c;
+  --checkbox-border-color-hover: #3a1d06;
+  --checkbox-color: #2a1c0c;
+  --checkbox-color-hover: #2a1c0c;
+
+  --blockquote-border-color: #9a6a24;
+  --blockquote-color: #5a3a12;
+  --blockquote-background-color: rgba(122, 79, 20, 0.06);
+  --embed-border-start: 2px solid rgba(122, 79, 20, 0.5);
+  --embed-background: rgba(122, 79, 20, 0.04);
+
+  --code-background: rgba(110, 70, 20, 0.08);
+  --code-border-color: rgba(110, 70, 20, 0.2);
+  --code-normal: #5a2d0c;
+  --code-comment: #8a7556;
+  --code-function: #7a5200;
+  --code-important: #b35300;
+  --code-keyword: #0f6a8a;
+  --code-operator: #a03070;
+  --code-property: #4a4aa8;
+  --code-punctuation: #5d4930;
+  --code-string: #3a6e10;
+  --code-tag: #a01830;
+  --code-value: #b04a00;
+
+  --table-border-color: rgba(110, 70, 20, 0.3);
+  --table-header-background: rgba(122, 79, 20, 0.1);
+  --table-header-color: #6e2410;
+  --table-row-alt-background: rgba(110, 70, 20, 0.035);
+  --table-row-background-hover: rgba(160, 110, 30, 0.1);
+  --table-row-alt-background-hover: rgba(160, 110, 30, 0.1);
+
+  --metadata-background: rgba(122, 79, 20, 0.05);
+  --metadata-border-color: rgba(110, 70, 20, 0.25);
+  --metadata-label-text-color: #7a4f14;
+  --metadata-label-text-color-hover: #3a1d06;
+
+  --nav-item-color: #5d4930;
+  --nav-item-color-hover: #2b1d0e;
+  --nav-item-color-active: #2b1d0e;
+  --nav-item-color-selected: #2b1d0e;
+  --nav-item-background-hover: rgba(110, 70, 20, 0.08);
+  --nav-item-background-active: transparent;
+  --nav-item-background-selected: rgba(160, 110, 30, 0.16);
+  --nav-heading-color: #6e2410;
+
+  --modal-background: var(--az-parch-1);
+  --modal-border-color: #6e4a1c;
+  --prompt-border-color: #6e4a1c;
+  --setting-items-background: var(--az-parch-0);
+  --setting-items-border-color: rgba(110, 70, 20, 0.2);
+  --setting-items-divider-color: rgba(110, 70, 20, 0.14);
+  --setting-group-heading-color: #6e2410;
+  --dropdown-background: #ead9b1;
+  --dropdown-background-hover: #e2cd9f;
+  --input-shadow: inset 0 0 0 1px rgba(110, 70, 20, 0.35), inset 0 1px 3px rgba(80, 50, 10, 0.15);
+  --input-shadow-hover: inset 0 0 0 1px rgba(110, 70, 20, 0.6), inset 0 1px 3px rgba(80, 50, 10, 0.15);
+  --scrollbar-thumb-bg: rgba(110, 70, 20, 0.3);
+  --scrollbar-active-thumb-bg: rgba(110, 70, 20, 0.55);
+  --scrollbar-bg: transparent;
+  --slider-track-background: rgba(110, 70, 20, 0.3);
+  --slider-fill-background: #7a4f14;
+  --toggle-thumb-color: #fff6dc;
+
+  --graph-text: #2b1d0e;
+  --graph-line: rgba(110, 70, 20, 0.35);
+  --graph-node: #7a4f14;
+  --graph-node-unresolved: #a99677;
+  --graph-node-focused: #8a1c0f;
+  --graph-node-tag: #6b20b0;
+  --graph-node-attachment: #2a7a1a;
+  --canvas-background: var(--az-parch-1);
+  --canvas-dot-pattern: rgba(110, 70, 20, 0.25);
+  --canvas-color-1: #b3170f;
+  --canvas-color-2: #b35300;
+  --canvas-color-3: #a07800;
+  --canvas-color-4: #2a7a1a;
+  --canvas-color-5: #00718f;
+  --canvas-color-6: #6b20b0;
+
+  --callout-default: var(--az-q-rare);
+  --callout-info: var(--az-q-rare);
+  --callout-todo: var(--az-q-rare);
+  --callout-summary: var(--az-q-heirloom);
+  --callout-important: #8a6a1c;
+  --callout-tip: var(--az-q-uncommon);
+  --callout-success: var(--az-q-uncommon);
+  --callout-question: #8a6d00;
+  --callout-warning: var(--az-q-legendary);
+  --callout-fail: var(--az-red);
+  --callout-error: var(--az-red);
+  --callout-bug: var(--az-red);
+  --callout-example: var(--az-q-epic);
+  --callout-quote: var(--az-q-poor);
+
+  --az-q-poor: #6e665a;
+  --az-q-common: #2b1d0e;
+  --az-q-uncommon: #1a7a00;
+  --az-q-rare: #0b55b0;
+  --az-q-epic: #6b20b0;
+  --az-q-legendary: #b35300;
+  --az-q-artifact: #8a6a1c;
+  --az-q-heirloom: #00718f;
+  --az-q-spell: #155f9a;
+  --az-q-quest: #7d6300;
+  --az-red: #b3170f;
+  --az-flavor: #7a5a0c;
+  --az-equip: #1a7a00;
+  --az-chat-say: #2b1d0e;
+  --az-chat-yell: #b01010;
+  --az-chat-whisper: #a0209a;
+  --az-chat-party: #3a3ab0;
+  --az-chat-guild: #157a15;
+  --az-chat-officer: #0f5f0f;
+  --az-chat-emote: #b5480a;
+  --az-chat-system: #7d6300;
+  --az-chat-npc: #6b5a00;
+  /* class and faction colors that would vanish on parchment */
+  --az-druid: #b35300;
+  --az-evoker: #1f6e5e;
+  --az-hunter: #4f7a16;
+  --az-mage: #13809f;
+  --az-monk: #00804c;
+  --az-paladin: #b3446f;
+  --az-priest: #6e665a;
+  --az-rogue: #8a7d00;
+  --az-warlock: #4f4fb8;
+  --az-warrior: #8a5a2b;
+  --az-alliance-c: #1d4f9e;
+  --az-horde-c: #a3140c;
+  --az-shaman-c: #0b55b0;
+  --az-tint: 11%;
+
+  --az-folder: #6e2410;
+  --az-h-shadow: 0 1px 0 rgba(255, 248, 225, 0.45);
+  --az-h-shadow-soft: none;
+  --az-rule: rgba(122, 79, 20, 0.55);
+  --az-rule-strong: #6e2410;
+  --az-tag-base: #8a5a18;
+  --az-tag-text: #6e2410;
+  --az-btn-text: #3a1d06;
+  --az-btn-top: #f1e2bf;
+  --az-btn-bottom: #dcc493;
+  --az-list-number: #7a4f14;
+  --az-chat-shadow: none;
+  --az-chat-frame: rgba(110, 70, 20, 0.07);
+  --az-highlight-sel: rgba(160, 110, 30, 0.16);
+  --az-page-tex: var(--az-fibers), radial-gradient(130% 110% at 50% 38%, transparent 52%, rgba(105, 58, 12, 0.24) 100%);
+  --az-gem: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M6 .8 11.2 6 6 11.2.8 6z' fill='%23f3e4c2' stroke='%237a4f14' stroke-width='1.1'/><path d='M6 3.6 8.4 6 6 8.4 3.6 6z' fill='%238a1c0f'/></svg>");
+  --az-hr: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 16'><path d='M0 8h12M52 8h12' stroke='%238a5f22'/><path d='M17 8l3-3 3 3-3 3zM41 8l3-3 3 3-3 3z' fill='%238a5f22'/><path d='M32 1.5 38.5 8 32 14.5 25.5 8z' fill='%23efe0bd' stroke='%235c3510' stroke-width='1.2'/><path d='M32 5 35 8 32 11 29 8z' fill='%238a1c0f'/></svg>");
+  --az-corner-tl: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='%237a4f14'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%238a1c0f' stroke='%23f3e4c2' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%237a4f14'/></svg>");
+  --az-corner-tr: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g transform='matrix(-1 0 0 1 40 0)'><g fill='none' stroke='%237a4f14'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%238a1c0f' stroke='%23f3e4c2' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%237a4f14'/></g></svg>");
+  --az-corner-bl: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g transform='matrix(1 0 0 -1 0 40)'><g fill='none' stroke='%237a4f14'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%238a1c0f' stroke='%23f3e4c2' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%237a4f14'/></g></svg>");
+  --az-corner-br: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g transform='matrix(-1 0 0 -1 40 40)'><g fill='none' stroke='%237a4f14'><path d='M1.5 36V9L9 1.5h27' stroke-width='1.2'/><path d='M5.5 28V11L11 5.5h17' stroke-opacity='.5'/></g><path d='M7 3.6 10.4 7 7 10.4 3.6 7z' fill='%238a1c0f' stroke='%23f3e4c2' stroke-width='.8'/><path d='M37 0l1.6 1.6L37 3.2l-1.6-1.6zM1.6 35.4l1.6 1.6-1.6 1.6L0 37z' fill='%237a4f14'/></g></svg>");
 }
 
-/* [!loot] / [!reward] */
-.callout[data-callout="loot"],
-.callout[data-callout="reward"] {
-    --callout-color: 255, 128, 0;
-    --callout-icon: gift;
-    border: 2px solid var(--wow-legendary);
-    border-left: 6px solid var(--wow-legendary);
-    background: linear-gradient(90deg, rgba(255, 128, 0, 0.14) 0%, rgba(255, 128, 0, 0.03) 100%);
-}
-.callout[data-callout="loot"] .callout-title,
-.callout[data-callout="reward"] .callout-title {
-    font-family: var(--font-heading);
-    color: var(--wow-legendary);
-    text-shadow: 0 0 8px rgba(255, 128, 0, 0.6);
+/* Obsidian derives these once on <body>; re-derive them on every surface
+   so a parchment page inside a dark frame (and the reverse) stays coherent */
+body.theme-dark,
+body.theme-light,
+body.theme-light .titlebar,
+body.theme-light .workspace-ribbon,
+body.theme-light .workspace-split.mod-left-split,
+body.theme-light .workspace-split.mod-right-split,
+body.theme-light .workspace-split.mod-root .workspace-tab-header-container,
+body.theme-light .status-bar,
+body.theme-dark.az-parchment .workspace-split.mod-root,
+body.theme-dark.az-parchment .workspace-split.mod-root .workspace-tab-header-container,
+body.theme-dark.az-parchment .popover.hover-popover,
+.callout[data-callout="quest"],
+.callout[data-callout="questlog"],
+.callout[data-callout="turnin"],
+.callout[data-callout="complete"],
+.callout[data-callout="gossip"],
+.menu,
+.tooltip,
+.notice,
+.suggestion-container,
+.callout[data-callout="item"],
+.callout[data-callout="tooltip"] {
+  --inline-title-color: var(--h1-color);
+  --file-header-background: var(--background-primary);
+  --file-header-background-focused: var(--background-primary);
+  --highlight-background: var(--text-highlight-bg);
+  --callout-blend-mode: var(--highlight-mix-blend-mode);
+  --table-selection-blend-mode: var(--highlight-mix-blend-mode);
+  --table-selection: color-mix(in oklch, var(--color-accent) 12%, transparent);
+  --search-result-background: var(--background-primary);
+  --metadata-input-text-color: var(--text-normal);
+  --metadata-divider-color: var(--background-modifier-border);
+  --nav-tag-color: var(--text-faint);
+  --embed-actions-background: color-mix(in srgb, var(--background-primary) 80%, transparent);
+  --pdf-background: var(--background-primary);
+  --pdf-page-background: var(--background-primary);
+  --drag-item-background: var(--background-primary);
 }
 
-/* [!boss] / [!raid] */
-.callout[data-callout="boss"],
-.callout[data-callout="raid"] {
-    --callout-color: 196, 31, 59;
-    --callout-icon: skull;
-    border: 2px solid #801222;
-    border-left: 6px solid var(--wow-horde-red);
-    background: linear-gradient(90deg, rgba(196, 31, 59, 0.15) 0%, rgba(196, 31, 59, 0.03) 100%);
+/* The tab you are reading sits on the page below it */
+body.theme-light .workspace-split.mod-root .workspace-tab-header-container,
+body.theme-dark.az-parchment .workspace-split.mod-root .workspace-tab-header-container {
+  --tab-background-active: var(--az-parch-1);
+  --tab-text-color-active: #5d4930;
+  --tab-text-color-focused-active: #3a1d06;
+  --tab-text-color-focused-active-current: #6e2410;
 }
-.callout[data-callout="boss"] .callout-title,
-.callout[data-callout="raid"] .callout-title {
-    font-family: var(--font-heading);
-    color: #ff4763;
-    text-shadow: 0 0 8px rgba(196, 31, 59, 0.7);
+body.theme-light .workspace {
+  background-color: var(--az-iron-0);
 }
 
-/* [!alliance] */
+/* ---- Tooltip: the navy box every WoW player knows ---- */
+.menu,
+.tooltip,
+.notice,
+.suggestion-container,
+.callout[data-callout="item"],
+.callout[data-callout="tooltip"] {
+  color-scheme: dark;
+  color: var(--text-normal);
+  --background-primary: var(--az-tooltip);
+  --background-primary-alt: #0d0e22;
+  --background-secondary: var(--az-tooltip);
+  --background-secondary-alt: #0d0e22;
+  --background-modifier-hover: rgba(140, 170, 255, 0.16);
+  --background-modifier-active-hover: rgba(140, 170, 255, 0.2);
+  --background-modifier-border: rgba(169, 169, 180, 0.3);
+  --background-modifier-border-hover: rgba(169, 169, 180, 0.55);
+  --background-modifier-border-focus: var(--az-silver);
+  --text-normal: #ffffff;
+  --text-muted: #b9b9c6;
+  --text-faint: #7d7d8c;
+  --text-accent: var(--az-gold);
+  --text-on-accent: #170f00;
+  --interactive-accent: var(--az-trim);
+  --icon-color: #b9b9c6;
+  --icon-color-hover: #ffffff;
+  --bold-color: #ffffff;
+  --link-color: var(--az-q-spell);
+  --link-external-color: var(--az-q-legendary);
+  --link-unresolved-color: var(--az-q-poor);
+  --code-normal: var(--az-artifact);
+  --code-background: rgba(255, 255, 255, 0.05);
+  --menu-background: rgba(8, 9, 24, 0.97);
+  --menu-border-color: var(--az-silver);
+  --tooltip-background: rgba(8, 9, 24, 0.97);
+  --tooltip-color: #ffffff;
+  --notice-background: rgba(8, 9, 24, 0.97);
+  --notice-color: var(--az-gold);
+  --suggestion-background: rgba(8, 9, 24, 0.97);
+}
+
+/* =====================================================================
+   3. THE FRAME — ribbon, sidebars, tabs, status bar
+   ===================================================================== */
+body:not(.is-mobile) .app-container {
+  background-color: var(--az-iron-0);
+}
+
+/* Ribbon icons sit in square action-bar slots */
+.workspace-ribbon {
+  background-image: var(--az-grain);
+  border-inline-end-color: color-mix(in srgb, var(--az-trim) 30%, transparent);
+  gap: 6px;
+}
+.workspace-ribbon .side-dock-actions,
+.workspace-ribbon .side-dock-settings {
+  gap: 6px;
+}
+.workspace-ribbon .side-dock-ribbon-action {
+  --icon-color: #b5ad9e;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  border-radius: 3px;
+  background: radial-gradient(circle at 50% 30%, #24242f 0%, #0c0c12 100%);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px color-mix(in srgb, var(--az-trim) 38%, transparent), inset 0 0 7px rgba(0, 0, 0, 0.9);
+  transition: box-shadow 120ms ease, color 120ms ease;
+}
+.workspace-ribbon .side-dock-ribbon-action:hover {
+  --icon-color: var(--az-gold);
+  --icon-color-hover: var(--az-gold);
+  background: radial-gradient(circle at 50% 30%, #2d2b30 0%, #0e0d10 100%);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px var(--az-gold), inset 0 0 10px rgba(255, 209, 0, 0.28), 0 0 8px rgba(255, 209, 0, 0.22);
+}
+.workspace-ribbon .side-dock-ribbon-action:active {
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 2px var(--az-gold), inset 0 0 12px rgba(255, 209, 0, 0.45);
+}
+
+/* Sidebars: dark stone */
+.workspace-split.mod-sidedock .workspace-leaf-content .view-content,
+.workspace-split.mod-sidedock .workspace-tab-header-container {
+  background-image: var(--az-grain);
+}
+.workspace-split.mod-left-split .workspace-tab-header-container,
+.workspace-split.mod-right-split .workspace-tab-header-container {
+  border-bottom-color: color-mix(in srgb, var(--az-trim) 30%, transparent);
+}
+.workspace-sidedock-vault-profile {
+  font-family: var(--az-font-display);
+  --vault-profile-color: var(--az-gold-soft);
+  --vault-profile-color-hover: var(--az-gold);
+  border-top: 1px solid color-mix(in srgb, var(--az-trim) 22%, transparent);
+}
+
+/* Main tab bar */
+.workspace-split.mod-root .workspace-tab-header-container {
+  background-image: var(--az-grain), linear-gradient(180deg, var(--az-iron-2), var(--az-iron-1));
+}
+.workspace-split.mod-root .workspace-tab-header-inner-title {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+}
+.workspace-split.mod-root .workspace-tab-header.is-active .workspace-tab-header-inner {
+  background-image: linear-gradient(90deg, transparent 6%, var(--az-accent) 50%, transparent 94%);
+  background-size: 100% 2px;
+  background-position: top;
+  background-repeat: no-repeat;
+}
+
+/* View header (title + breadcrumbs above a note) */
+.view-header-title-container,
+.view-header-breadcrumb {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+}
+
+/* File explorer: zones and quests, like the quest log */
+.nav-folder-title {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+  color: var(--az-folder);
+}
+.nav-folder-title:hover {
+  color: var(--nav-item-color-hover);
+}
+.tree-item-self.is-active {
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--az-accent) 22%, transparent), color-mix(in srgb, var(--az-accent) 4%, transparent) 85%);
+  box-shadow: inset 2px 0 0 var(--az-accent);
+}
+.nav-file-tag {
+  font-family: var(--az-font-caps);
+  color: var(--az-trim);
+}
+
+/* Status bar */
+.status-bar {
+  background-image: var(--az-grain);
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+}
+
+/* Window title bar (custom frame on Windows/Linux) */
+.titlebar-text {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.04em;
+}
+
+/* Settings and other vertical tab pages */
+.vertical-tab-header-group-title {
+  font-family: var(--az-font-caps);
+  letter-spacing: 0.1em;
+  color: var(--az-gold-soft);
+}
+body.theme-light .vertical-tab-header-group-title {
+  color: #6e2410;
+}
+.vertical-tab-nav-item {
+  font-family: var(--az-font-display);
+}
+.vertical-tab-nav-item.is-active {
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--az-gold) 22%, transparent), transparent 90%);
+  box-shadow: inset 2px 0 0 var(--interactive-accent-hover);
+}
+.setting-item-heading .setting-item-name,
+.setting-group .setting-item-heading .setting-item-name {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+  color: var(--setting-group-heading-color);
+}
+
+/* =====================================================================
+   4. THE PAGE
+   ===================================================================== */
+.workspace-split.mod-root .view-content,
+.popover.hover-popover .markdown-embed {
+  background-image: var(--az-page-tex);
+}
+body.theme-dark:not(.az-parchment) .workspace-split.mod-root .view-content {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--az-trim) 8%, transparent);
+}
+
+/* Gilded corners around the open note */
+.workspace-split.mod-root .workspace-leaf-content[data-type="markdown"]::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--header-height) + 6px) 6px 6px 6px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.85;
+  background:
+    var(--az-corner-tl) left top / 40px 40px no-repeat,
+    var(--az-corner-tr) right top / 40px 40px no-repeat,
+    var(--az-corner-bl) left bottom / 40px 40px no-repeat,
+    var(--az-corner-br) right bottom / 40px 40px no-repeat;
+}
+body.az-no-ornaments .workspace-leaf-content[data-type="markdown"]::after {
+  display: none;
+}
+
+/* ---- Headings ---- */
+.markdown-rendered :is(h1, h2, h3, h4),
+.markdown-source-view.mod-cm6 :is(.HyperMD-header-1, .HyperMD-header-2, .HyperMD-header-3, .HyperMD-header-4),
+.inline-title {
+  text-shadow: var(--az-h-shadow);
+}
+.markdown-rendered :is(h5, h6),
+.markdown-source-view.mod-cm6 :is(.HyperMD-header-5, .HyperMD-header-6) {
+  text-transform: uppercase;
+}
+
+/* H1 and the note title: quest title with a gem and a gilded rule */
+.markdown-rendered h1,
+.markdown-source-view.mod-cm6 .HyperMD-header-1,
+.inline-title {
+  padding-bottom: 0.42em;
+  background:
+    var(--az-gem) left bottom / 11px 11px no-repeat,
+    linear-gradient(90deg, var(--az-rule-strong), var(--az-rule) 32%, transparent 88%) left 15px bottom 5px / calc(100% - 15px) 1px no-repeat;
+}
+.markdown-source-view.mod-cm6 .HyperMD-header-1 {
+  padding-bottom: 0.32em;
+}
+
+/* H2: section header with a short fading rule */
+.markdown-rendered h2,
+.markdown-source-view.mod-cm6 .HyperMD-header-2 {
+  padding-bottom: 0.18em;
+  background: linear-gradient(90deg, var(--az-rule), transparent 65%) left bottom / 100% 1px no-repeat;
+}
+
+/* ---- Text ---- */
+/* Book serifs have a small x-height; even them out so 16px reads like 16px */
+.markdown-preview-view,
+.markdown-source-view.mod-cm6 .cm-scroller {
+  font-size-adjust: 0.47;
+}
+.markdown-rendered strong,
+.cm-strong {
+  color: var(--bold-color);
+}
+.markdown-rendered mark,
+.cm-s-obsidian span.cm-highlight {
+  color: inherit;
+  border-radius: 2px;
+}
+::selection {
+  background-color: var(--text-selection);
+}
+
+/* ---- Lists ---- */
+.markdown-rendered ol > li::marker,
+.markdown-source-view.mod-cm6 .cm-formatting-list-ol {
+  color: var(--az-list-number);
+  font-family: var(--az-font-display);
+}
+
+/* ---- Links, written like chat links: [Name] ---- */
+.markdown-rendered a.internal-link:not(.is-unresolved)::before,
+.markdown-rendered a.internal-link:not(.is-unresolved)::after {
+  color: inherit;
+  opacity: 0.75;
+  font-weight: normal;
+}
+.markdown-rendered a.internal-link:not(.is-unresolved)::before {
+  content: "[";
+}
+.markdown-rendered a.internal-link:not(.is-unresolved)::after {
+  content: "]";
+}
+body.az-no-brackets .markdown-rendered a.internal-link::before,
+body.az-no-brackets .markdown-rendered a.internal-link::after {
+  content: none;
+}
+.markdown-rendered a.internal-link:hover,
+.markdown-source-view.mod-cm6 .cm-hmd-internal-link:hover {
+  text-shadow: 0 0 10px color-mix(in srgb, var(--link-color) 55%, transparent);
+}
+body.az-links-rare :is(.markdown-rendered, .markdown-source-view, .metadata-container) {
+  --link-color: var(--az-q-rare);
+  --link-color-hover: color-mix(in srgb, var(--az-q-rare) 70%, white);
+}
+body.az-links-epic :is(.markdown-rendered, .markdown-source-view, .metadata-container) {
+  --link-color: var(--az-q-epic);
+  --link-color-hover: color-mix(in srgb, var(--az-q-epic) 70%, white);
+}
+body.az-links-legendary :is(.markdown-rendered, .markdown-source-view, .metadata-container) {
+  --link-color: var(--az-q-legendary);
+  --link-color-hover: color-mix(in srgb, var(--az-q-legendary) 70%, white);
+}
+body.az-links-quest :is(.markdown-rendered, .markdown-source-view, .metadata-container) {
+  --link-color: var(--az-q-quest);
+  --link-color-hover: color-mix(in srgb, var(--az-q-quest) 70%, white);
+}
+
+/* ---- Tags: cut-gem labels; quality, class and faction tags glow in their color ---- */
+.markdown-rendered a.tag,
+.cm-s-obsidian span.cm-hashtag,
+.metadata-container .multi-select-pill.tag-pill {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+  color: var(--az-tagc, var(--az-tag-text));
+  background-color: color-mix(in srgb, var(--az-tagc, var(--az-tag-base)) 11%, transparent);
+  border-color: color-mix(in srgb, var(--az-tagc, var(--az-tag-base)) 45%, transparent);
+}
+.markdown-rendered a.tag:hover {
+  background-color: color-mix(in srgb, var(--az-tagc, var(--az-tag-base)) 22%, transparent);
+  border-color: var(--az-tagc, var(--az-tag-base));
+}
+:is(a.tag[href="#poor" i], a.tag[href="#schlecht" i], .cm-tag-poor, .cm-tag-schlecht) { --az-tagc: var(--az-q-poor); }
+:is(a.tag[href="#common" i], a.tag[href="#verbreitet" i], .cm-tag-common, .cm-tag-verbreitet) { --az-tagc: var(--az-q-common); }
+:is(a.tag[href="#uncommon" i], a.tag[href="#selten" i], .cm-tag-uncommon, .cm-tag-selten) { --az-tagc: var(--az-q-uncommon); }
+:is(a.tag[href="#rare" i], a.tag[href="#rar" i], .cm-tag-rare, .cm-tag-rar) { --az-tagc: var(--az-q-rare); }
+:is(a.tag[href="#epic" i], a.tag[href="#episch" i], .cm-tag-epic, .cm-tag-episch) { --az-tagc: var(--az-q-epic); }
+:is(a.tag[href="#legendary" i], a.tag[href="#legendär" i], .cm-tag-legendary, .cm-tag-legendär) { --az-tagc: var(--az-q-legendary); }
+:is(a.tag[href="#artifact" i], a.tag[href="#artefakt" i], .cm-tag-artifact, .cm-tag-artefakt) { --az-tagc: var(--az-q-artifact); }
+:is(a.tag[href="#heirloom" i], a.tag[href="#erbstück" i], .cm-tag-heirloom, .cm-tag-erbstück) { --az-tagc: var(--az-q-heirloom); }
+:is(a.tag[href="#deathknight" i], a.tag[href="#todesritter" i], .cm-tag-deathknight, .cm-tag-todesritter) { --az-tagc: var(--az-deathknight); }
+:is(a.tag[href="#demonhunter" i], a.tag[href="#dämonenjäger" i], .cm-tag-demonhunter, .cm-tag-dämonenjäger) { --az-tagc: var(--az-demonhunter); }
+:is(a.tag[href="#druid" i], a.tag[href="#druide" i], .cm-tag-druid, .cm-tag-druide) { --az-tagc: var(--az-druid); }
+:is(a.tag[href="#evoker" i], a.tag[href="#rufer" i], .cm-tag-evoker, .cm-tag-rufer) { --az-tagc: var(--az-evoker); }
+:is(a.tag[href="#hunter" i], a.tag[href="#jäger" i], .cm-tag-hunter, .cm-tag-jäger) { --az-tagc: var(--az-hunter); }
+:is(a.tag[href="#mage" i], a.tag[href="#magier" i], .cm-tag-mage, .cm-tag-magier) { --az-tagc: var(--az-mage); }
+:is(a.tag[href="#monk" i], a.tag[href="#mönch" i], .cm-tag-monk, .cm-tag-mönch) { --az-tagc: var(--az-monk); }
+:is(a.tag[href="#paladin" i], .cm-tag-paladin) { --az-tagc: var(--az-paladin); }
+:is(a.tag[href="#priest" i], a.tag[href="#priester" i], .cm-tag-priest, .cm-tag-priester) { --az-tagc: var(--az-priest); }
+:is(a.tag[href="#rogue" i], a.tag[href="#schurke" i], .cm-tag-rogue, .cm-tag-schurke) { --az-tagc: var(--az-rogue); }
+:is(a.tag[href="#shaman" i], a.tag[href="#schamane" i], .cm-tag-shaman, .cm-tag-schamane) { --az-tagc: var(--az-shaman-c); }
+:is(a.tag[href="#warlock" i], a.tag[href="#hexenmeister" i], .cm-tag-warlock, .cm-tag-hexenmeister) { --az-tagc: var(--az-warlock); }
+:is(a.tag[href="#warrior" i], a.tag[href="#krieger" i], .cm-tag-warrior, .cm-tag-krieger) { --az-tagc: var(--az-warrior); }
+:is(a.tag[href="#alliance" i], a.tag[href="#allianz" i], .cm-tag-alliance, .cm-tag-allianz) { --az-tagc: var(--az-alliance-c); }
+:is(a.tag[href="#horde" i], .cm-tag-horde) { --az-tagc: var(--az-horde-c); }
+
+/* ---- Task checkboxes: the gold Warcraft check that spills over the box ---- */
+input[type="checkbox"] {
+  border-radius: var(--checkbox-radius);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+input[type="checkbox"]:checked::after {
+  -webkit-mask-image: none;
+  background: var(--az-check) center / contain no-repeat;
+  width: calc(var(--checkbox-size) + 6px);
+  height: calc(var(--checkbox-size) + 6px);
+  top: -6px;
+  inset-inline-start: -2px;
+}
+input[type="checkbox"]:checked {
+  border-color: var(--checkbox-border-color);
+}
+@media (hover: hover) {
+  input[type="checkbox"]:checked:hover {
+    border-color: var(--checkbox-border-color-hover);
+  }
+}
+/* - [!] quest available · - [?] ready to turn in · - [-] abandoned
+   (reading view puts data-task on the <li>, live preview on the line) */
+:is(li[data-task="!"] > input, li[data-task="!"] > p > input, .HyperMD-task-line[data-task="!"] input,
+    li[data-task="?"] > input, li[data-task="?"] > p > input, .HyperMD-task-line[data-task="?"] input).task-list-item-checkbox:checked {
+  border-color: transparent;
+  background-color: transparent;
+  box-shadow: none;
+}
+:is(li[data-task="!"] > input, li[data-task="!"] > p > input, .HyperMD-task-line[data-task="!"] input).task-list-item-checkbox:checked::after {
+  background-image: var(--az-bang);
+  inset-inline-start: 0;
+  top: -3px;
+  width: var(--checkbox-size);
+  height: calc(var(--checkbox-size) + 4px);
+}
+:is(li[data-task="?"] > input, li[data-task="?"] > p > input, .HyperMD-task-line[data-task="?"] input).task-list-item-checkbox:checked::after {
+  background-image: var(--az-query);
+  inset-inline-start: 0;
+  top: -3px;
+  width: var(--checkbox-size);
+  height: calc(var(--checkbox-size) + 4px);
+}
+:is(li[data-task="-"] > input, li[data-task="-"] > p > input, .HyperMD-task-line[data-task="-"] input).task-list-item-checkbox:checked::after {
+  background-image: var(--az-cross);
+  top: -3px;
+  inset-inline-start: -2px;
+  width: calc(var(--checkbox-size) + 4px);
+  height: calc(var(--checkbox-size) + 4px);
+}
+.markdown-rendered li[data-task="-"],
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="-"] {
+  color: var(--checklist-done-color);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--az-red) 60%, transparent);
+}
+
+/* ---- Horizontal rule: gilded divider with a gem ---- */
+.markdown-rendered hr,
+.markdown-source-view.mod-cm6 hr {
+  border: none;
+  height: 16px;
+  background:
+    var(--az-hr) center / 64px 16px no-repeat,
+    linear-gradient(90deg, transparent, var(--az-rule)) left center / calc(50% - 34px) 1px no-repeat,
+    linear-gradient(90deg, var(--az-rule), transparent) right center / calc(50% - 34px) 1px no-repeat;
+}
+.markdown-rendered hr {
+  margin: 2.2rem 0;
+}
+
+/* ---- Blockquote: flavor text ---- */
+.markdown-rendered blockquote {
+  padding: 0.35em 1em;
+  border-radius: 0 3px 3px 0;
+}
+
+/* ---- Code ---- */
+.markdown-rendered pre,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* ---- Tables: loot list ---- */
+.markdown-rendered th,
+.markdown-source-view.mod-cm6 .cm-table-widget th {
+  letter-spacing: 0.06em;
+  text-shadow: var(--az-h-shadow-soft);
+  border-bottom: 1px solid var(--az-rule);
+}
+
+/* ---- Embeds and hover previews ---- */
+.markdown-embed-title,
+.file-embed-title {
+  font-family: var(--az-font-display);
+  color: var(--h1-color);
+}
+.popover.hover-popover {
+  border: 1px solid var(--az-trim);
+  box-shadow: 0 0 0 1px #000, 0 18px 50px rgba(0, 0, 0, 0.65);
+}
+
+/* ---- Properties: a character sheet ---- */
+.metadata-properties-heading .metadata-properties-title {
+  font-family: var(--az-font-caps);
+  letter-spacing: 0.08em;
+  color: var(--h1-color);
+}
+
+/* ---- XP bar ---- */
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  border: 1px solid #000;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--az-trim) 45%, transparent);
+  background: #140a1e;
+  vertical-align: middle;
+}
+progress::-webkit-progress-bar {
+  background: linear-gradient(180deg, #1d0f2a, #0b0510);
+}
+progress::-webkit-progress-value {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(5% - 1px), rgba(0, 0, 0, 0.65) calc(5% - 1px) 5%),
+    linear-gradient(180deg, #c26cf0 0%, #8a2bc4 50%, #5a1188 100%);
+}
+
+/* ---- Inline helpers: <span class="q-epic">…</span>, <span class="c-mage">…</span> ---- */
+.q-poor { color: var(--az-q-poor); }
+.q-common { color: var(--az-q-common); }
+.q-uncommon { color: var(--az-q-uncommon); }
+.q-rare { color: var(--az-q-rare); }
+.q-epic { color: var(--az-q-epic); }
+.q-legendary { color: var(--az-q-legendary); }
+.q-artifact { color: var(--az-q-artifact); }
+.q-heirloom { color: var(--az-q-heirloom); }
+.c-deathknight { color: var(--az-deathknight); }
+.c-demonhunter { color: var(--az-demonhunter); }
+.c-druid { color: var(--az-druid); }
+.c-evoker { color: var(--az-evoker); }
+.c-hunter { color: var(--az-hunter); }
+.c-mage { color: var(--az-mage); }
+.c-monk { color: var(--az-monk); }
+.c-paladin { color: var(--az-paladin); }
+.c-priest { color: var(--az-priest); }
+.c-rogue { color: var(--az-rogue); }
+.c-shaman { color: var(--az-shaman-c); }
+.c-warlock { color: var(--az-warlock); }
+.c-warrior { color: var(--az-warrior); }
+
+/* =====================================================================
+   5. CALLOUTS
+   ===================================================================== */
+.callout {
+  border-inline-start-width: 3px;
+  border-inline-start-color: var(--callout-color);
+  background-color: color-mix(in oklch, var(--callout-color) 5%, transparent);
+  background-image: linear-gradient(90deg, color-mix(in oklch, var(--callout-color) 10%, transparent), transparent 80%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+}
+.callout-title {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+  text-shadow: var(--az-h-shadow-soft);
+}
+
+/* Quality callouts: [!poor] … [!heirloom] */
+.callout[data-callout="poor"] { --callout-color: var(--az-q-poor); --callout-icon: lucide-gem; }
+.callout[data-callout="common"] { --callout-color: var(--az-q-common); --callout-icon: lucide-gem; }
+.callout[data-callout="uncommon"] { --callout-color: var(--az-q-uncommon); --callout-icon: lucide-gem; }
+.callout[data-callout="rare"] { --callout-color: var(--az-q-rare); --callout-icon: lucide-gem; }
+.callout[data-callout="epic"] { --callout-color: var(--az-q-epic); --callout-icon: lucide-gem; }
+.callout[data-callout="legendary"] { --callout-color: var(--az-q-legendary); --callout-icon: lucide-gem; }
+.callout[data-callout="artifact"] { --callout-color: var(--az-q-artifact); --callout-icon: lucide-gem; }
+.callout[data-callout="heirloom"] { --callout-color: var(--az-q-heirloom); --callout-icon: lucide-gem; }
+
+/* [!quest] [!turnin] [!gossip] — parchment cards */
+.callout:is([data-callout="quest"], [data-callout="questlog"], [data-callout="turnin"], [data-callout="complete"], [data-callout="gossip"]) {
+  --callout-color: #7a4f14;
+  --callout-icon: lucide-message-circle;
+  --callout-padding: 12px 16px 14px 16px;
+  mix-blend-mode: normal;
+  border: 1px solid #5c3d12;
+  border-radius: 3px;
+  background-color: var(--az-parch-1);
+  background-image: var(--az-fibers), radial-gradient(130% 120% at 50% 40%, transparent 50%, rgba(105, 58, 12, 0.22) 100%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55), inset 0 0 0 3px var(--az-parch-1), inset 0 0 0 4px rgba(122, 79, 20, 0.3), 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+.callout:is([data-callout="quest"], [data-callout="questlog"], [data-callout="turnin"], [data-callout="complete"], [data-callout="gossip"]) .callout-title {
+  color: #3a1d06;
+  font-size: 1.1em;
+  align-items: center;
+}
+.callout:is([data-callout="quest"], [data-callout="questlog"], [data-callout="turnin"], [data-callout="complete"]) .callout-icon .svg-icon {
+  display: none;
+}
+.callout:is([data-callout="quest"], [data-callout="questlog"], [data-callout="turnin"], [data-callout="complete"]) .callout-icon::before {
+  content: "";
+  display: block;
+  width: 0.85em;
+  height: 1.3em;
+  background: var(--az-bang) center / contain no-repeat;
+}
+.callout:is([data-callout="turnin"], [data-callout="complete"]) .callout-icon::before {
+  background-image: var(--az-query);
+}
+
+/* [!item|epic] — an in-game item tooltip */
+.callout:is([data-callout="item"], [data-callout="tooltip"]) {
+  --callout-color: var(--az-silver);
+  --callout-icon: lucide-gem;
+  --callout-padding: 10px 14px 12px 12px;
+  --az-iq: var(--az-q-common);
+  mix-blend-mode: normal;
+  width: fit-content;
+  min-width: 16em;
+  max-width: min(100%, 30em);
+  border: 1px solid var(--az-silver);
+  border-radius: 5px;
+  background: rgba(8, 9, 24, 0.95);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0, 0, 0, 0.7), 0 8px 24px rgba(0, 0, 0, 0.5);
+  font-family: var(--az-font-display);
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"]) .callout-title {
+  color: var(--az-iq);
+  font-size: 1.12em;
+  align-items: center;
+  text-shadow: 0 1px 1px #000;
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"]) .callout-icon {
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  margin-inline-end: 6px;
+  border: 1px solid var(--az-iq);
+  border-radius: 3px;
+  background: radial-gradient(circle at 50% 35%, #2c2c3c, #08080f);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--az-iq) 45%, transparent), inset 0 0 6px rgba(0, 0, 0, 0.9);
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"]) .callout-icon .svg-icon {
+  color: var(--az-iq);
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"]) .callout-content p {
+  margin-block: 0.15em;
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"]) .callout-content mark {
+  background: none;
+  color: var(--az-equip);
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"]) .callout-content em {
+  font-style: normal;
+  color: var(--az-flavor);
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"]) .callout-content del {
+  text-decoration: none;
+  color: #ff2020;
+}
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="poor" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="schlecht" i] { --az-iq: var(--az-q-poor); }
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="common" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="verbreitet" i] { --az-iq: var(--az-q-common); }
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="uncommon" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="selten" i] { --az-iq: var(--az-q-uncommon); }
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="rare" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="rar" i] { --az-iq: var(--az-q-rare); }
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="epic" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="episch" i] { --az-iq: var(--az-q-epic); }
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="legendary" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="legendär" i] { --az-iq: var(--az-q-legendary); }
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="artifact" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="artefakt" i] { --az-iq: var(--az-q-artifact); }
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="heirloom" i],
+.callout:is([data-callout="item"], [data-callout="tooltip"])[data-callout-metadata*="erbstück" i] { --az-iq: var(--az-q-heirloom); }
+
+/* [!boss] [!raid] — encounter journal */
+.callout:is([data-callout="boss"], [data-callout="raid"], [data-callout="encounter"]) {
+  --callout-color: var(--az-red);
+  --callout-icon: lucide-skull;
+  background-image: linear-gradient(90deg, color-mix(in oklch, var(--az-red) var(--az-tint), transparent), color-mix(in oklch, var(--az-red) 3%, transparent) 85%);
+}
+.callout:is([data-callout="boss"], [data-callout="raid"], [data-callout="encounter"]) .callout-title {
+  font-family: var(--az-font-caps);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* [!loot] [!reward] */
+.callout:is([data-callout="loot"], [data-callout="reward"]) {
+  --callout-color: var(--h1-color);
+  --callout-icon: lucide-coins;
+}
+
+/* [!achievement|10] — achievement toast with a points shield */
+.callout[data-callout="achievement"] {
+  --callout-color: var(--az-gold);
+  --callout-icon: lucide-trophy;
+  --callout-padding: 12px 64px 14px 18px;
+  position: relative;
+  mix-blend-mode: normal;
+  color: #f4ead2;
+  border: 1px solid var(--az-trim);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #3d2c10 0%, #241807 55%, #160f05 100%);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 3px #2a1d09, inset 0 0 0 4px rgba(255, 209, 0, 0.28), 0 6px 18px rgba(0, 0, 0, 0.45);
+  --bold-color: #ffffff;
+}
+.callout[data-callout="achievement"] .callout-title {
+  color: var(--az-gold);
+  font-size: 1.12em;
+  text-shadow: 0 1px 2px #000;
+}
+.callout[data-callout="achievement"][data-callout-metadata]:not([data-callout-metadata=""])::after {
+  content: attr(data-callout-metadata);
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding-bottom: 4px;
+  font-family: var(--az-font-book);
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000;
+  background: var(--az-shield) center / contain no-repeat;
+}
+
+/* [!alliance] [!horde] */
 .callout[data-callout="alliance"] {
-    --callout-color: 0, 74, 152;
-    --callout-icon: shield;
-    border: 2px solid var(--wow-alliance-gold);
-    border-left: 6px solid var(--wow-alliance-gold);
-    background: linear-gradient(90deg, rgba(0, 74, 152, 0.18) 0%, rgba(0, 74, 152, 0.04) 100%);
+  --callout-color: #ffd100;
+  --callout-icon: lucide-shield;
+  mix-blend-mode: normal;
+  border-color: rgba(255, 209, 0, 0.45);
+  border-inline-start-color: #2f6fe0;
+  background-color: rgba(8, 30, 80, 0.35);
+  background-image: linear-gradient(90deg, rgba(20, 70, 180, 0.4), rgba(10, 40, 110, 0.08) 85%);
 }
-.callout[data-callout="alliance"] .callout-title {
-    font-family: var(--font-heading);
-    color: var(--wow-alliance-gold);
-    text-shadow: 0 0 6px rgba(255, 209, 0, 0.5);
-}
-
-/* [!horde] */
 .callout[data-callout="horde"] {
-    --callout-color: 196, 31, 59;
-    --callout-icon: flame;
-    border: 2px solid #57121b;
-    border-left: 6px solid var(--wow-horde-red);
-    background: linear-gradient(90deg, rgba(196, 31, 59, 0.18) 0%, rgba(35, 13, 17, 0.05) 100%);
+  --callout-color: #ff5a45;
+  --callout-icon: lucide-swords;
+  mix-blend-mode: normal;
+  border-color: rgba(185, 138, 68, 0.5);
+  border-inline-start-color: #c41f3b;
+  background-color: rgba(60, 8, 8, 0.4);
+  background-image: linear-gradient(90deg, rgba(160, 20, 20, 0.38), rgba(60, 8, 8, 0.08) 85%);
 }
-.callout[data-callout="horde"] .callout-title {
-    font-family: var(--font-heading);
-    color: #ff5252;
-    text-shadow: 0 0 6px rgba(196, 31, 59, 0.5);
+body.theme-light .callout[data-callout="alliance"] {
+  --callout-color: #0a3f8f;
+  background-color: rgba(30, 80, 180, 0.08);
+  background-image: linear-gradient(90deg, rgba(30, 80, 180, 0.16), transparent 85%);
 }
-
-/* =================================================================
-   ITEM RARITY BADGES & TAGS
-   ================================================================= */
-.callout[data-callout="uncommon"] {
-    border-left: 5px solid var(--wow-uncommon);
-    background: rgba(30, 255, 0, 0.08);
-}
-.callout[data-callout="rare"] {
-    border-left: 5px solid var(--wow-rare);
-    background: rgba(0, 112, 221, 0.08);
-}
-.callout[data-callout="epic"] {
-    border-left: 5px solid var(--wow-epic);
-    background: rgba(163, 53, 238, 0.08);
-}
-.callout[data-callout="legendary"] {
-    border-left: 5px solid var(--wow-legendary);
-    background: rgba(255, 128, 0, 0.08);
+body.theme-light .callout[data-callout="horde"] {
+  --callout-color: #9a1010;
+  background-color: rgba(160, 20, 20, 0.07);
+  background-image: linear-gradient(90deg, rgba(160, 20, 20, 0.15), transparent 85%);
 }
 
-/* Glowing Rarity Tags */
-.markdown-rendered a.tag[href*="uncommon"],
-.cm-s-obsidian span.cm-hashtag.cm-tag-uncommon {
-    color: var(--wow-uncommon);
-    border-color: rgba(30, 255, 0, 0.6);
-    background: rgba(30, 255, 0, 0.12);
-    box-shadow: 0 0 6px rgba(30, 255, 0, 0.25);
+/* [!say] Name — chat lines */
+.callout:is([data-callout="say"], [data-callout="yell"], [data-callout="whisper"], [data-callout="party"], [data-callout="guild"], [data-callout="officer"], [data-callout="emote"], [data-callout="system"], [data-callout="npc"]) {
+  --callout-padding: 3px 10px;
+  --callout-color: var(--az-chatc);
+  mix-blend-mode: normal;
+  margin: 2px 0;
+  border: 0;
+  border-radius: 2px;
+  background: var(--az-chat-frame);
+  box-shadow: none;
+  color: var(--az-chatc);
+  font-family: var(--az-font-chat);
+  text-shadow: var(--az-chat-shadow);
+  --bold-color: var(--az-chatc);
 }
-.markdown-rendered a.tag[href*="rare"],
-.cm-s-obsidian span.cm-hashtag.cm-tag-rare {
-    color: var(--wow-rare);
-    border-color: rgba(0, 112, 221, 0.6);
-    background: rgba(0, 112, 221, 0.12);
-    box-shadow: 0 0 6px rgba(0, 112, 221, 0.25);
+.callout[data-callout="say"] { --az-chatc: var(--az-chat-say); }
+.callout[data-callout="yell"] { --az-chatc: var(--az-chat-yell); }
+.callout[data-callout="whisper"] { --az-chatc: var(--az-chat-whisper); }
+.callout[data-callout="party"] { --az-chatc: var(--az-chat-party); }
+.callout[data-callout="guild"] { --az-chatc: var(--az-chat-guild); }
+.callout[data-callout="officer"] { --az-chatc: var(--az-chat-officer); }
+.callout[data-callout="emote"] { --az-chatc: var(--az-chat-emote); }
+.callout[data-callout="system"] { --az-chatc: var(--az-chat-system); }
+.callout[data-callout="npc"] { --az-chatc: var(--az-chat-npc); }
+.callout:is([data-callout="say"], [data-callout="yell"], [data-callout="whisper"], [data-callout="party"], [data-callout="guild"], [data-callout="officer"], [data-callout="emote"], [data-callout="system"], [data-callout="npc"]) > .callout-title {
+  display: inline-flex;
+  margin-inline-end: 0.2em;
+  font-family: inherit;
+  letter-spacing: 0;
+  color: inherit;
+  text-shadow: inherit;
 }
-.markdown-rendered a.tag[href*="epic"],
-.cm-s-obsidian span.cm-hashtag.cm-tag-epic {
-    color: var(--wow-epic);
-    border-color: rgba(163, 53, 238, 0.6);
-    background: rgba(163, 53, 238, 0.12);
-    box-shadow: 0 0 8px rgba(163, 53, 238, 0.35);
+.callout:is([data-callout="say"], [data-callout="yell"], [data-callout="whisper"], [data-callout="party"], [data-callout="guild"], [data-callout="officer"], [data-callout="emote"], [data-callout="system"], [data-callout="npc"]) .callout-icon {
+  display: none;
 }
-.markdown-rendered a.tag[href*="legendary"],
-.cm-s-obsidian span.cm-hashtag.cm-tag-legendary {
-    color: var(--wow-legendary);
-    border-color: rgba(255, 128, 0, 0.6);
-    background: rgba(255, 128, 0, 0.12);
-    box-shadow: 0 0 10px rgba(255, 128, 0, 0.4);
+.callout:is([data-callout="say"], [data-callout="yell"], [data-callout="whisper"], [data-callout="party"], [data-callout="guild"], [data-callout="officer"], [data-callout="system"], [data-callout="npc"]) .callout-title-inner::before {
+  content: "[";
 }
-.markdown-rendered a.tag[href*="artifact"],
-.cm-s-obsidian span.cm-hashtag.cm-tag-artifact {
-    color: var(--wow-artifact);
-    border-color: rgba(230, 204, 128, 0.6);
-    background: rgba(230, 204, 128, 0.12);
-    box-shadow: 0 0 8px rgba(230, 204, 128, 0.35);
+.callout:is([data-callout="say"], [data-callout="yell"], [data-callout="whisper"], [data-callout="party"], [data-callout="guild"], [data-callout="officer"], [data-callout="system"], [data-callout="npc"]) .callout-title-inner::after {
+  content: "]:";
+}
+.callout:is([data-callout="say"], [data-callout="yell"], [data-callout="whisper"], [data-callout="party"], [data-callout="guild"], [data-callout="officer"], [data-callout="emote"], [data-callout="system"], [data-callout="npc"]) > .callout-content {
+  display: inline;
+}
+.callout:is([data-callout="say"], [data-callout="yell"], [data-callout="whisper"], [data-callout="party"], [data-callout="guild"], [data-callout="officer"], [data-callout="emote"], [data-callout="system"], [data-callout="npc"]) > .callout-content > p {
+  display: inline;
+  margin: 0;
+}
+
+/* =====================================================================
+   6. CHAT LOG NOTES — cssclasses: chatlog
+   ===================================================================== */
+.chatlog {
+  --font-text: var(--az-font-chat);
+  --p-spacing: 0.55rem;
+  --line-height-normal: 1.45;
+}
+.chatlog.markdown-preview-view,
+.chatlog .cm-scroller {
+  font-size-adjust: none;
+}
+.chatlog :is(.markdown-preview-sizer, .cm-contentContainer) {
+  text-shadow: var(--az-chat-shadow);
+}
+.chatlog em,
+.chatlog .cm-em {
+  font-style: normal;
+  color: var(--az-chat-emote);
+}
+
+/* =====================================================================
+   7. CONTROLS — buttons, inputs, toggles
+   ===================================================================== */
+button:not(.clickable-icon) {
+  font-family: var(--az-font-display);
+  letter-spacing: 0.02em;
+  color: var(--az-btn-text);
+  background-color: var(--az-btn-bottom);
+  background-image: linear-gradient(180deg, var(--az-btn-top), var(--az-btn-bottom));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--az-trim) 50%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+@media (hover: hover) {
+  button:not(.clickable-icon):hover {
+    background-image: linear-gradient(180deg, color-mix(in srgb, var(--az-btn-top) 85%, white), var(--az-btn-bottom));
+    box-shadow: inset 0 0 0 1px var(--az-trim), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 8px rgba(255, 209, 0, 0.18);
+  }
+}
+
+/* The classic red panel button */
+button.mod-cta {
+  color: var(--az-gold);
+  text-shadow: 0 1px 1px #000;
+  background-color: var(--az-cta-2);
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--az-cta-1) 85%, white) 0%, var(--az-cta-1) 42%, var(--az-cta-2) 100%);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px var(--az-trim), inset 0 2px 0 rgba(255, 220, 180, 0.22), 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+@media (hover: hover) {
+  button.mod-cta:hover {
+    color: var(--az-gold-hi);
+    background-color: var(--az-cta-2);
+    background-image: linear-gradient(180deg, color-mix(in srgb, var(--az-cta-1) 70%, white) 0%, color-mix(in srgb, var(--az-cta-1) 90%, white) 42%, var(--az-cta-2) 100%);
+    box-shadow: 0 0 0 1px #000, inset 0 0 0 1px var(--az-gold), inset 0 2px 0 rgba(255, 220, 180, 0.3), 0 0 10px rgba(255, 209, 0, 0.35);
+  }
+}
+button.mod-warning {
+  color: #ffffff;
+  background-color: #4a0805;
+  background-image: linear-gradient(180deg, #8a120c, #4a0805);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #c0392b;
+}
+
+/* Modal close button: the red square with a gold X */
+.modal-close-button {
+  color: var(--az-gold);
+  border-radius: 3px;
+  background-image: linear-gradient(180deg, #a8150d, #5a0805);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px var(--az-trim);
+  --icon-color: var(--az-gold);
+  --icon-color-hover: var(--az-gold-hi);
+}
+.modal-close-button:hover {
+  background-image: linear-gradient(180deg, #c81d14, #6a0a06);
+}
+
+/* Toggles: a gold lever */
+.checkbox-container {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--az-trim) 40%, transparent), inset 0 1px 4px rgba(0, 0, 0, 0.75);
+  background-color: #08080d;
+}
+.checkbox-container.is-enabled {
+  background-color: var(--az-trim-deep);
+  background-image: linear-gradient(180deg, var(--az-trim), var(--az-trim-deep));
+  box-shadow: inset 0 0 0 1px var(--az-gold), 0 0 6px rgba(255, 209, 0, 0.25);
+}
+.checkbox-container::after {
+  background: radial-gradient(circle at 35% 30%, #fff6cf 0%, #d8b45a 55%, #6d531f 100%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.75), 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+body.theme-light .modal .checkbox-container:not(.is-enabled) {
+  background-color: #d8c296;
+}
+
+/* =====================================================================
+   8. DIALOGS, MENUS, TOOLTIPS
+   ===================================================================== */
+/* Dialog frame: gold edge with an inner gilded line */
+.modal,
+.prompt {
+  border: 1px solid var(--modal-border-color);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 3px var(--modal-background), inset 0 0 0 4px color-mix(in srgb, var(--modal-border-color) 35%, transparent), 0 24px 70px rgba(0, 0, 0, 0.75);
+}
+.prompt {
+  background-color: var(--modal-background);
+}
+.modal-title {
+  font-family: var(--az-font-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--h1-color);
+  text-shadow: var(--az-h-shadow-soft);
+}
+.suggestion-item.is-selected,
+.prompt .suggestion-item.is-selected {
+  background-color: transparent;
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--az-gold) 20%, transparent), color-mix(in srgb, var(--az-gold) 3%, transparent) 90%);
+  box-shadow: inset 2px 0 0 var(--interactive-accent-hover);
+}
+.suggestion-highlight {
+  color: var(--text-accent);
+  font-weight: 600;
+}
+.suggestion-container .suggestion-item.is-selected {
+  background-image: linear-gradient(90deg, transparent, rgba(140, 170, 255, 0.22) 12%, rgba(140, 170, 255, 0.22) 88%, transparent);
+  box-shadow: none;
+}
+
+/* Menus: in-game dropdown — tooltip box, blue-white highlight bar */
+.menu {
+  border: 1px solid var(--az-silver);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0, 0, 0, 0.6), 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+.menu-item.selected:not(.is-disabled):not(.is-label) {
+  background-color: transparent;
+  background-image: linear-gradient(90deg, transparent, rgba(140, 170, 255, 0.24) 10%, rgba(140, 170, 255, 0.24) 90%, transparent);
+}
+.menu-item.is-label,
+.menu-group-title {
+  font-family: var(--az-font-display);
+  color: var(--az-gold);
+}
+.menu-separator {
+  border-color: rgba(169, 169, 180, 0.22);
+}
+.menu-item.is-warning {
+  color: #ff4040;
+}
+
+/* Tooltips and notices */
+.tooltip {
+  border: 1px solid var(--az-silver);
+  box-shadow: 0 0 0 1px #000, 0 6px 18px rgba(0, 0, 0, 0.5);
+  font-family: var(--az-font-display);
+}
+.tooltip .tooltip-arrow {
+  border-bottom-color: var(--az-silver);
+}
+.notice {
+  color: var(--notice-color);
+  border: 1px solid var(--az-silver);
+  box-shadow: 0 0 0 1px #000, 0 8px 22px rgba(0, 0, 0, 0.5);
+  font-family: var(--az-font-display);
+  text-shadow: 0 1px 1px #000;
+}
+
+/* =====================================================================
+   9. PRINT — keep exported PDFs on white paper
+   ===================================================================== */
+@media print {
+  body {
+    --az-h-shadow: none;
+  }
+  .markdown-rendered :is(h1, h2, h3, h4) {
+    text-shadow: none;
+  }
 }
