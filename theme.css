@@ -1,21 +1,25 @@
 /* =================================================================
-   WoW - Warcraft UI — Theme for Obsidian
-   Crafted with love for Azerothian adventurers, GMs, and lorekeepers.
-   
-   Dark Mode:  The Dungeon & Tooltip Interface (Slate, Brass & Glowing Rarity)
-   Light Mode: The Questlog & Spellbook (Warm Parchment, Iron Ink & Wax Seals)
+   WoW - Warcraft UI — Authentic MMORPG Theme for Obsidian
+   Crafted with authentic Warcraft UI aesthetics:
+   - Friz Quadrata / Chiseled Fantasy Typography
+   - Golden Embossed Headings & Diamond Quest Dividers
+   - In-Game Chat Style Item Links [Item Name]
+   - Diamond Quest Objective Markers (◆)
+   - Tooltip & Dialog Framing with Gold/Bronze Filigree
+   - Item Quality / Rarity Color Tokens & Glowing Tags
+   - Parchment Questlog (Light Mode) & Dark Iron/Dungeon UI (Dark Mode)
    
    Author: ShakToth
    License: MIT
    ================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=MedievalSharp&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=MedievalSharp&display=swap');
 
 /* =================================================================
-   ROOT: Core Warcraft Color Tokens
+   ROOT: Core Warcraft Color Tokens & Fonts
    ================================================================= */
 :root {
-    /* --- Item Rarity Tokens --- */
+    /* --- Item Rarity Tokens (Official Blizzard Hex Codes) --- */
     --wow-poor: #9d9d9d;
     --wow-common: #ffffff;
     --wow-uncommon: #1eff00;
@@ -25,99 +29,87 @@
     --wow-artifact: #e6cc80;
     --wow-heirloom: #00ccff;
 
+    /* --- Warcraft Metallics & Gold --- */
+    --gold-bright: #ffd100;
+    --gold-headline: #ffe285;
+    --gold-amber: #ffaa00;
+    --gold-brass: #c89b3c;
+    --gold-antique: #8a6a2a;
+    --gold-dark-trim: #4a3816;
+    --silver-iron: #9499a8;
+
     /* --- Faction Tokens --- */
     --wow-alliance-blue: #004a98;
-    --wow-alliance-gold: #f8b700;
-    --wow-horde-red: #b31b1b;
-    --wow-horde-iron: #211c19;
+    --wow-alliance-gold: #ffd100;
+    --wow-horde-red: #c41f3b;
+    --wow-horde-dark: #380d11;
 
-    /* --- Class Color Palette --- */
-    --wow-warrior: #c79c6e;
-    --wow-paladin: #f58cba;
-    --wow-hunter: #abd473;
-    --wow-rogue: #fff569;
-    --wow-priest: #f0ebe0;
-    --wow-deathknight: #c41f3b;
-    --wow-shaman: #0070de;
-    --wow-mage: #69ccf0;
-    --wow-warlock: #9482c9;
-    --wow-monk: #00ff96;
-    --wow-druid: #ff7d0a;
-    --wow-demonhunter: #a330c9;
-    --wow-evoker: #33937f;
-
-    /* --- Fonts --- */
-    --font-heading: 'Cinzel', 'MedievalSharp', 'Georgia', serif;
-    --font-body: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-    --font-parchment: 'Crimson Text', 'Georgia', serif;
+    /* --- Typography Stacks --- */
+    --font-heading: 'Friz Quadrata', 'Friz Quadrata TT', 'LifeCraft', 'Cinzel Decorative', 'Cinzel', 'Georgia', serif;
+    --font-text: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    --font-parchment: 'Crimson Pro', 'Georgia', 'Times New Roman', serif;
 }
 
 /* =================================================================
-   DARK MODE: The Dungeon, Raid & Tooltip UI
+   DARK MODE: The Dungeon, Raid & Character Frame UI
    ================================================================= */
 .theme-dark {
-    /* Backgrounds: Dark Stone & Slate */
-    --bg-dark-void: #0b0c0f;
-    --bg-stone-deep: #111217;
-    --bg-stone-mid: #161820;
-    --bg-stone-elevated: #1e202b;
+    /* Dark Slate & Deep Granite */
+    --bg-stone-void: #090a0d;
+    --bg-stone-deep: #101217;
+    --bg-stone-surface: #151821;
+    --bg-stone-elevated: #1d212e;
 
     --background-primary: var(--bg-stone-deep);
-    --background-primary-alt: var(--bg-dark-void);
-    --background-secondary: var(--bg-stone-mid);
-    --background-secondary-alt: #0e0f14;
+    --background-primary-alt: var(--bg-stone-void);
+    --background-secondary: var(--bg-stone-surface);
+    --background-secondary-alt: #0c0e12;
 
-    /* Gold & Brass Borders */
-    --gold-bright: #f8b700;
-    --gold-primary: #d4af37;
-    --gold-brass: #c89b3c;
-    --gold-dark: #8a6a2a;
-    --gold-muted-border: rgba(200, 155, 60, 0.32);
-    --gold-glow: rgba(248, 183, 0, 0.25);
-
-    --background-modifier-border: var(--gold-muted-border);
-    --background-modifier-border-hover: rgba(248, 183, 0, 0.65);
+    /* Borders: Metallic Brass & Inset Framing */
+    --background-modifier-border: rgba(200, 155, 60, 0.35);
+    --background-modifier-border-hover: rgba(255, 209, 0, 0.7);
     --background-modifier-border-focus: var(--gold-bright);
-    --background-modifier-form-field: rgba(11, 12, 15, 0.85);
-    --background-modifier-box-shadow: 0 14px 38px rgba(0, 0, 0, 0.75);
+    --background-modifier-form-field: rgba(9, 10, 13, 0.9);
+    --background-modifier-box-shadow: 0 16px 42px rgba(0, 0, 0, 0.85);
 
-    /* Text: Bone, Silver & Ash */
-    --text-normal: #ded7cb;
-    --text-muted: #9e998e;
-    --text-faint: #6e6a61;
+    /* Text: Silver & Bone-White */
+    --text-normal: #ded7cc;
+    --text-muted: #999489;
+    --text-faint: #636058;
 
-    /* Headings: Blizzard Quest Gold Hierarchy */
+    /* Headings: Blizzard Quest Title Hierarchy */
     --h1-color: var(--gold-bright);
-    --h2-color: #ebd078;
-    --h3-color: #d6cdb8;
+    --h2-color: #f0cf65;
+    --h3-color: #ded7cc;
     --h4-color: var(--gold-brass);
     --h5-color: #a8a396;
     --h6-color: #7d786d;
 
-    /* Accents & Links */
+    /* Accents & Highlights */
     --text-accent: var(--gold-bright);
-    --text-accent-hover: #ffd100;
-    --interactive-accent: var(--gold-brass);
-    --interactive-accent-hover: var(--gold-bright);
-    --interactive-normal: rgba(200, 155, 60, 0.08);
-    --interactive-hover: rgba(200, 155, 60, 0.18);
+    --text-accent-hover: #fff073;
+    --interactive-accent: #8a6a2a;
+    --interactive-accent-hover: #c89b3c;
+    --interactive-normal: rgba(200, 155, 60, 0.1);
+    --interactive-hover: rgba(200, 155, 60, 0.22);
 
-    --link-color: #66a3ff;
-    --link-color-hover: #99c2ff;
-    --link-external-color: #ffaa00;
-    --link-external-color-hover: #ffd100;
-    --text-highlight-bg: rgba(248, 183, 0, 0.28);
-    --text-selection: rgba(248, 183, 0, 0.45);
+    /* Links: Rare Item Magic Blue & Legendary Amber */
+    --link-color: #0070dd;
+    --link-color-hover: #4ba6ff;
+    --link-external-color: var(--wow-legendary);
+    --link-external-color-hover: #ffad33;
+    --text-highlight-bg: rgba(255, 209, 0, 0.3);
+    --text-selection: rgba(200, 155, 60, 0.45);
 
-    /* Code Blocks (Artifact Theme) */
-    --code-normal: #e6cc80;
-    --code-background: #090a0d;
+    /* Code Blocks */
+    --code-normal: var(--wow-artifact);
+    --code-background: #08090c;
 
-    /* Tags (Horde / Alliance Amber Pills) */
+    /* Tags: Golden Pill Badges */
     --tag-color: var(--gold-bright);
-    --tag-background: rgba(200, 155, 60, 0.14);
-    --tag-background-hover: rgba(248, 183, 0, 0.28);
-    --tag-border-color: rgba(200, 155, 60, 0.45);
+    --tag-background: rgba(200, 155, 60, 0.16);
+    --tag-background-hover: rgba(255, 209, 0, 0.28);
+    --tag-border-color: rgba(200, 155, 60, 0.5);
     --tag-border-color-hover: var(--gold-bright);
 
     /* Tabs & Navigation */
@@ -127,63 +119,62 @@
     --nav-item-color: var(--text-muted);
     --nav-item-color-hover: var(--text-normal);
     --nav-item-color-active: var(--gold-bright);
-    --nav-item-background-hover: rgba(200, 155, 60, 0.12);
-    --nav-item-background-active: rgba(200, 155, 60, 0.22);
+    --nav-item-background-hover: rgba(200, 155, 60, 0.14);
+    --nav-item-background-active: rgba(200, 155, 60, 0.25);
 
     /* Scrollbars */
-    --scrollbar-bg: #0c0d10;
-    --scrollbar-thumb-bg: rgba(200, 155, 60, 0.35);
+    --scrollbar-bg: #090a0d;
+    --scrollbar-thumb-bg: rgba(200, 155, 60, 0.38);
 
     /* Status Bar */
-    --status-bar-background: #0c0d10;
-    --status-bar-border-color: var(--gold-muted-border);
+    --status-bar-background: #0a0b0e;
+    --status-bar-border-color: rgba(200, 155, 60, 0.3);
     --status-bar-text-color: var(--text-faint);
 }
 
 .theme-dark .app-container {
     background:
-        radial-gradient(ellipse 70% 30% at 50% -5%, rgba(248, 183, 0, 0.08), transparent 70%),
-        radial-gradient(ellipse 80% 35% at 50% 105%, rgba(179, 27, 27, 0.12), transparent 70%),
+        radial-gradient(ellipse 65% 30% at 50% -5%, rgba(255, 209, 0, 0.1), transparent 70%),
+        radial-gradient(ellipse 75% 35% at 50% 105%, rgba(196, 31, 59, 0.12), transparent 70%),
         var(--bg-stone-deep);
 }
 
 /* =================================================================
-   LIGHT MODE: The Questlog & Spellbook
+   LIGHT MODE: The Questlog & Spellbook Parchment
    ================================================================= */
 .theme-light {
-    /* Backgrounds: Warm Aged Parchment */
-    --parchment-bright: #fdf6e6;
-    --parchment-base: #f5ecd5;
+    --parchment-bright: #fffdf5;
+    --parchment-base: #f4ecd8;
     --parchment-aged: #ebdcc0;
-    --parchment-dark: #dfccaa;
+    --parchment-shadow: #d4bf9c;
 
     --background-primary: var(--parchment-base);
     --background-primary-alt: var(--parchment-bright);
     --background-secondary: var(--parchment-aged);
-    --background-secondary-alt: var(--parchment-dark);
+    --background-secondary-alt: var(--parchment-shadow);
 
-    /* Antique Brass & Wax Borders */
+    /* Antique Brass & Wax Seals */
     --wax-seal: #8c1b1b;
     --ink-dark: #241a12;
     --antique-gold: #8a5e12;
-    --antique-border: rgba(138, 94, 18, 0.35);
+    --antique-border: rgba(138, 94, 18, 0.38);
 
     --background-modifier-border: var(--antique-border);
-    --background-modifier-border-hover: rgba(138, 94, 18, 0.75);
+    --background-modifier-border-hover: rgba(138, 94, 18, 0.8);
     --background-modifier-border-focus: var(--antique-gold);
-    --background-modifier-form-field: rgba(253, 246, 230, 0.95);
-    --background-modifier-box-shadow: 0 10px 30px rgba(60, 40, 20, 0.25);
+    --background-modifier-form-field: rgba(255, 253, 245, 0.95);
+    --background-modifier-box-shadow: 0 10px 32px rgba(60, 40, 20, 0.25);
 
-    /* Typography: Iron Gall Ink */
+    /* Typography: Dark Iron Gall Ink */
     --text-normal: var(--ink-dark);
-    --text-muted: #5c4532;
-    --text-faint: #8a735c;
+    --text-muted: #59432f;
+    --text-faint: #856e58;
 
-    /* Headings: Deep Crimson & Antique Gold */
-    --h1-color: #6e1313;
+    /* Headings: Deep Crimson & Wax Gold */
+    --h1-color: #731414;
     --h2-color: var(--antique-gold);
     --h3-color: #3b2514;
-    --h4-color: #593e26;
+    --h4-color: #543a22;
     --h5-color: #694b32;
     --h6-color: #785a40;
 
@@ -192,25 +183,25 @@
     --text-accent-hover: #b07a1a;
     --interactive-accent: var(--wax-seal);
     --interactive-accent-hover: #a82020;
-    --interactive-normal: rgba(138, 94, 18, 0.08);
-    --interactive-hover: rgba(138, 94, 18, 0.16);
+    --interactive-normal: rgba(138, 94, 18, 0.1);
+    --interactive-hover: rgba(138, 94, 18, 0.2);
 
     --link-color: #174880;
     --link-color-hover: #2264b3;
     --link-external-color: var(--wax-seal);
     --link-external-color-hover: #b02424;
-    --text-highlight-bg: rgba(248, 183, 0, 0.4);
-    --text-selection: rgba(212, 175, 55, 0.35);
+    --text-highlight-bg: rgba(255, 209, 0, 0.4);
+    --text-selection: rgba(212, 175, 55, 0.4);
 
-    /* Code Blocks (Warm Vellum) */
+    /* Code Blocks */
     --code-normal: #4a2c0f;
     --code-background: #ede0c2;
 
     /* Tags */
     --tag-color: #731414;
-    --tag-background: rgba(138, 94, 18, 0.12);
-    --tag-background-hover: rgba(138, 94, 18, 0.22);
-    --tag-border-color: rgba(138, 94, 18, 0.4);
+    --tag-background: rgba(138, 94, 18, 0.14);
+    --tag-background-hover: rgba(138, 94, 18, 0.25);
+    --tag-border-color: rgba(138, 94, 18, 0.45);
     --tag-border-color-hover: #731414;
 
     /* Tabs & Navigation */
@@ -220,8 +211,8 @@
     --nav-item-color: var(--text-muted);
     --nav-item-color-hover: var(--text-normal);
     --nav-item-color-active: var(--wax-seal);
-    --nav-item-background-hover: rgba(138, 94, 18, 0.1);
-    --nav-item-background-active: rgba(138, 94, 18, 0.18);
+    --nav-item-background-hover: rgba(138, 94, 18, 0.12);
+    --nav-item-background-active: rgba(138, 94, 18, 0.22);
 
     /* Scrollbars */
     --scrollbar-bg: var(--parchment-aged);
@@ -237,136 +228,282 @@
 .theme-light .markdown-preview-view {
     font-family: var(--font-parchment);
     font-size: 1.05rem;
-    line-height: 1.65;
+    line-height: 1.7;
 }
 
 /* =================================================================
-   TYPOGRAPHY & HEADINGS
+   TYPOGRAPHY: Embossed Headings & Chiseled Fonts
    ================================================================= */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6,
+.inline-title,
+.markdown-rendered h1,
+.markdown-rendered h2,
+.markdown-rendered h3,
+.markdown-rendered h4 {
     font-family: var(--font-heading);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     font-weight: 700;
 }
 
-h1 {
-    border-bottom: 2px solid var(--background-modifier-border);
-    padding-bottom: 0.3em;
+/* H1: The Classic Golden Quest Header */
+.theme-dark h1,
+.theme-dark .inline-title,
+.theme-dark .markdown-rendered h1,
+.theme-dark .cm-header-1 {
+    color: var(--gold-bright);
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 3px 6px rgba(0, 0, 0, 0.9);
+    border-bottom: 2px solid;
+    border-image: linear-gradient(90deg, #c89b3c 0%, #ffd100 25%, #c89b3c 60%, transparent 100%) 1;
+    padding-bottom: 0.35em;
     margin-top: 1.2em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-.theme-light h1 {
-    text-shadow: none;
-    border-bottom: 2px solid rgba(138, 94, 18, 0.4);
+.theme-light h1,
+.theme-light .inline-title,
+.theme-light .markdown-rendered h1,
+.theme-light .cm-header-1 {
+    color: var(--h1-color);
+    border-bottom: 2px solid;
+    border-image: linear-gradient(90deg, #8a5e12 0%, #731414 40%, transparent 100%) 1;
+    padding-bottom: 0.35em;
+    margin-top: 1.2em;
 }
 
-h2 {
-    border-bottom: 1px dashed var(--background-modifier-border);
+/* H2 & H3 Subtitles */
+.theme-dark h2,
+.theme-dark .markdown-rendered h2,
+.theme-dark .cm-header-2 {
+    color: var(--h2-color);
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 2px 4px rgba(0, 0, 0, 0.8);
+    border-bottom: 1px dashed rgba(200, 155, 60, 0.4);
     padding-bottom: 0.2em;
+    margin-top: 1.1em;
+}
+
+.theme-dark h3,
+.theme-dark .markdown-rendered h3,
+.theme-dark .cm-header-3 {
+    color: var(--h3-color);
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* =================================================================
-   UI FRAMES, BUTTONS & TABS
+   WARCRAFT DIVIDERS: Golden Filigree with Center Diamond (◆)
    ================================================================= */
-.mod-root .workspace-tabs .workspace-tab-header.is-active {
-    border-top: 3px solid var(--text-accent);
+.markdown-rendered hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #c89b3c 20%, #ffd100 50%, #c89b3c 80%, transparent 100%);
+    position: relative;
+    margin: 2.2em 0;
+    box-shadow: 0 0 6px rgba(255, 209, 0, 0.4);
+}
+
+.markdown-rendered hr::after {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--gold-bright);
     background: var(--background-primary);
+    padding: 0 8px;
+    font-size: 13px;
+    text-shadow: 0 0 8px rgba(255, 209, 0, 0.8);
 }
 
-.theme-dark .mod-root .workspace-tabs .workspace-tab-header.is-active {
-    box-shadow: inset 0 2px 6px rgba(248, 183, 0, 0.2);
+.theme-light .markdown-rendered hr {
+    background: linear-gradient(90deg, transparent 0%, #8a5e12 25%, #731414 50%, #8a5e12 75%, transparent 100%);
+    box-shadow: none;
+}
+.theme-light .markdown-rendered hr::after {
+    color: #731414;
+    text-shadow: none;
 }
 
-/* Modals & Popovers (Blizzard Dialog Frame Aesthetic) */
-.modal, .popover, .menu {
-    border: 1px solid var(--background-modifier-border);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 0 0 1px var(--background-modifier-border);
-    border-radius: 6px;
+/* =================================================================
+   QUEST OBJECTIVE BULLETS: Golden Diamond Markers (◆)
+   ================================================================= */
+.theme-dark .markdown-rendered ul > li::marker,
+.theme-dark .cm-formatting-list-ul {
+    content: '◆ ';
+    color: var(--gold-bright);
+    font-size: 0.8em;
+    text-shadow: 0 0 5px rgba(255, 209, 0, 0.7);
 }
 
-/* Buttons */
+.theme-light .markdown-rendered ul > li::marker,
+.theme-light .cm-formatting-list-ul {
+    content: '◆ ';
+    color: var(--h1-color);
+    font-size: 0.8em;
+}
+
+.theme-dark .markdown-rendered ol > li::marker,
+.theme-dark .cm-formatting-list-ol {
+    color: var(--gold-bright);
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+/* Checkboxes (Quest Objectives) */
+.markdown-rendered input[type="checkbox"]:checked,
+.cm-task-checkbox[data-task="x"] {
+    background-color: var(--gold-antique);
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 6px rgba(255, 209, 0, 0.6);
+}
+
+/* =================================================================
+   IN-GAME CHAT ITEM LINKS: [Link Name]
+   ================================================================= */
+.internal-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.15s ease;
+}
+
+.internal-link::before {
+    content: '[';
+    color: rgba(200, 155, 60, 0.7);
+    font-weight: 400;
+}
+
+.internal-link::after {
+    content: ']';
+    color: rgba(200, 155, 60, 0.7);
+    font-weight: 400;
+}
+
+.internal-link:hover {
+    color: var(--gold-bright);
+    text-shadow: 0 0 8px rgba(255, 209, 0, 0.8);
+}
+.internal-link:hover::before,
+.internal-link:hover::after {
+    color: var(--gold-bright);
+}
+
+/* =================================================================
+   UI FRAMES: Beveled Action Buttons, Modals & Tabs
+   ================================================================= */
+/* Active Workspace Tab */
+.mod-root .workspace-tabs .workspace-tab-header.is-active {
+    border-top: 3px solid var(--gold-bright);
+    background: var(--background-primary);
+    box-shadow: inset 0 3px 8px rgba(255, 209, 0, 0.25);
+}
+
+.workspace-tab-header {
+    border-radius: 6px 6px 0 0;
+    font-family: var(--font-heading);
+    font-size: 0.88em;
+    letter-spacing: 0.03em;
+}
+
+/* Buttons (Classic WoW Metallic Action Bar Button) */
 button.mod-cta {
-    background-color: var(--interactive-accent);
-    color: #ffffff;
+    background: linear-gradient(180deg, #a88032 0%, #614618 60%, #3d2b0e 100%);
+    color: #fff9e6;
     font-family: var(--font-heading);
     font-weight: 700;
     letter-spacing: 0.05em;
-    border: 1px solid var(--text-accent);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 4px rgba(0,0,0,0.5);
-    transition: all 0.15s ease-in-out;
+    text-shadow: 0 1px 2px #000;
+    border: 1px solid var(--gold-bright);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 3px 8px rgba(0, 0, 0, 0.6);
+    transition: all 0.15s ease;
 }
 
 button.mod-cta:hover {
-    background-color: var(--interactive-accent-hover);
-    box-shadow: 0 0 8px var(--text-accent);
+    background: linear-gradient(180deg, #d4a742 0%, #876222 60%, #523b14 100%);
+    box-shadow: 0 0 12px rgba(255, 209, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    color: #ffffff;
     cursor: pointer;
 }
 
+/* Modals & Dialog Frames (Blizzard NPC Dialog Box) */
+.modal, .popover, .menu {
+    border: 2px solid var(--gold-brass);
+    outline: 1px solid rgba(0, 0, 0, 0.8);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 209, 0, 0.35);
+    border-radius: 6px;
+    background: var(--background-secondary);
+}
+
 /* =================================================================
-   TABLES: Beveled Loot & Stats Table
+   TABLES: Beveled Loot & Character Stats Table
    ================================================================= */
 table {
     border-collapse: separate;
     border-spacing: 0;
-    border: 1px solid var(--background-modifier-border);
-    border-radius: 4px;
-    margin: 1.2em 0;
+    border: 1px solid var(--gold-brass);
+    border-radius: 5px;
+    margin: 1.4em 0;
     width: 100%;
     overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 th {
-    background: rgba(200, 155, 60, 0.15);
+    background: linear-gradient(180deg, rgba(200, 155, 60, 0.25) 0%, rgba(200, 155, 60, 0.1) 100%);
     font-family: var(--font-heading);
-    color: var(--text-accent);
+    color: var(--gold-bright);
+    text-shadow: 0 1px 2px #000;
     padding: 10px 14px;
-    border-bottom: 2px solid var(--background-modifier-border);
+    border-bottom: 2px solid var(--gold-brass);
     text-transform: uppercase;
     font-size: 0.85em;
     letter-spacing: 0.05em;
 }
 
 .theme-light th {
-    background: rgba(138, 94, 18, 0.15);
+    background: rgba(138, 94, 18, 0.18);
     color: var(--h1-color);
+    text-shadow: none;
 }
 
 td {
-    padding: 8px 14px;
-    border-bottom: 1px solid var(--background-modifier-border);
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(200, 155, 60, 0.18);
 }
 
 tr:nth-child(even) td {
-    background: rgba(200, 155, 60, 0.04);
+    background: rgba(200, 155, 60, 0.05);
 }
 
 /* =================================================================
-   CALLOUTS: Questlog, Loot, Boss, Alliance, Horde
+   CALLOUTS: Quest, Loot, Boss, Alliance & Horde
    ================================================================= */
 .callout {
     border-radius: 6px;
     border: 1px solid var(--background-modifier-border);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    margin: 1.4em 0;
 }
 
 /* [!quest] / [!questlog] */
 .callout[data-callout="quest"],
 .callout[data-callout="questlog"] {
-    --callout-color: 248, 183, 0;
+    --callout-color: 255, 209, 0;
     --callout-icon: help-circle;
-    border-left: 4px solid var(--wow-alliance-gold);
-    background: rgba(248, 183, 0, 0.08);
+    border: 2px solid var(--gold-brass);
+    border-left: 6px solid var(--gold-bright);
+    background: linear-gradient(90deg, rgba(255, 209, 0, 0.12) 0%, rgba(200, 155, 60, 0.04) 100%);
 }
 .callout[data-callout="quest"] .callout-title,
 .callout[data-callout="questlog"] .callout-title {
     font-family: var(--font-heading);
     font-weight: 700;
     color: var(--gold-bright);
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 2px #000;
 }
 .theme-light .callout[data-callout="quest"] .callout-title,
 .theme-light .callout[data-callout="questlog"] .callout-title {
     color: var(--h1-color);
+    text-shadow: none;
 }
 
 /* [!loot] / [!reward] */
@@ -374,110 +511,114 @@ tr:nth-child(even) td {
 .callout[data-callout="reward"] {
     --callout-color: 255, 128, 0;
     --callout-icon: gift;
-    border-left: 4px solid var(--wow-legendary);
-    background: rgba(255, 128, 0, 0.08);
+    border: 2px solid var(--wow-legendary);
+    border-left: 6px solid var(--wow-legendary);
+    background: linear-gradient(90deg, rgba(255, 128, 0, 0.14) 0%, rgba(255, 128, 0, 0.03) 100%);
 }
 .callout[data-callout="loot"] .callout-title,
 .callout[data-callout="reward"] .callout-title {
     font-family: var(--font-heading);
     color: var(--wow-legendary);
+    text-shadow: 0 0 8px rgba(255, 128, 0, 0.6);
 }
 
 /* [!boss] / [!raid] */
 .callout[data-callout="boss"],
 .callout[data-callout="raid"] {
-    --callout-color: 179, 27, 27;
+    --callout-color: 196, 31, 59;
     --callout-icon: skull;
-    border-left: 4px solid var(--wow-horde-red);
-    background: rgba(179, 27, 27, 0.1);
+    border: 2px solid #801222;
+    border-left: 6px solid var(--wow-horde-red);
+    background: linear-gradient(90deg, rgba(196, 31, 59, 0.15) 0%, rgba(196, 31, 59, 0.03) 100%);
 }
 .callout[data-callout="boss"] .callout-title,
 .callout[data-callout="raid"] .callout-title {
     font-family: var(--font-heading);
-    color: #e54b4b;
+    color: #ff4763;
+    text-shadow: 0 0 8px rgba(196, 31, 59, 0.7);
 }
 
 /* [!alliance] */
 .callout[data-callout="alliance"] {
     --callout-color: 0, 74, 152;
     --callout-icon: shield;
-    border-left: 4px solid var(--wow-alliance-gold);
-    border-top: 1px solid var(--wow-alliance-blue);
-    background: rgba(0, 74, 152, 0.12);
+    border: 2px solid var(--wow-alliance-gold);
+    border-left: 6px solid var(--wow-alliance-gold);
+    background: linear-gradient(90deg, rgba(0, 74, 152, 0.18) 0%, rgba(0, 74, 152, 0.04) 100%);
 }
 .callout[data-callout="alliance"] .callout-title {
     font-family: var(--font-heading);
     color: var(--wow-alliance-gold);
+    text-shadow: 0 0 6px rgba(255, 209, 0, 0.5);
 }
 
 /* [!horde] */
 .callout[data-callout="horde"] {
-    --callout-color: 179, 27, 27;
+    --callout-color: 196, 31, 59;
     --callout-icon: flame;
-    border-left: 4px solid var(--wow-horde-red);
-    background: rgba(179, 27, 27, 0.12);
+    border: 2px solid #57121b;
+    border-left: 6px solid var(--wow-horde-red);
+    background: linear-gradient(90deg, rgba(196, 31, 59, 0.18) 0%, rgba(35, 13, 17, 0.05) 100%);
 }
 .callout[data-callout="horde"] .callout-title {
     font-family: var(--font-heading);
     color: #ff5252;
+    text-shadow: 0 0 6px rgba(196, 31, 59, 0.5);
 }
 
 /* =================================================================
-   ITEM RARITY CALLOUTS & TAGS
+   ITEM RARITY BADGES & TAGS
    ================================================================= */
-.callout[data-callout="common"] {
-    --callout-color: 255, 255, 255;
-    border-left: 4px solid var(--wow-common);
-}
 .callout[data-callout="uncommon"] {
-    --callout-color: 30, 255, 0;
-    border-left: 4px solid var(--wow-uncommon);
+    border-left: 5px solid var(--wow-uncommon);
     background: rgba(30, 255, 0, 0.08);
 }
 .callout[data-callout="rare"] {
-    --callout-color: 0, 112, 221;
-    border-left: 4px solid var(--wow-rare);
+    border-left: 5px solid var(--wow-rare);
     background: rgba(0, 112, 221, 0.08);
 }
 .callout[data-callout="epic"] {
-    --callout-color: 163, 53, 238;
-    border-left: 4px solid var(--wow-epic);
+    border-left: 5px solid var(--wow-epic);
     background: rgba(163, 53, 238, 0.08);
 }
 .callout[data-callout="legendary"] {
-    --callout-color: 255, 128, 0;
-    border-left: 4px solid var(--wow-legendary);
+    border-left: 5px solid var(--wow-legendary);
     background: rgba(255, 128, 0, 0.08);
-}
-.callout[data-callout="artifact"] {
-    --callout-color: 230, 204, 128;
-    border-left: 4px solid var(--wow-artifact);
-    background: rgba(230, 204, 128, 0.08);
 }
 
 /* Glowing Rarity Tags */
-a.tag[href*="uncommon"] {
+.markdown-rendered a.tag[href*="uncommon"],
+.cm-s-obsidian span.cm-hashtag.cm-tag-uncommon {
     color: var(--wow-uncommon);
-    border-color: rgba(30, 255, 0, 0.5);
-    background: rgba(30, 255, 0, 0.1);
+    border-color: rgba(30, 255, 0, 0.6);
+    background: rgba(30, 255, 0, 0.12);
+    box-shadow: 0 0 6px rgba(30, 255, 0, 0.25);
 }
-a.tag[href*="rare"] {
+.markdown-rendered a.tag[href*="rare"],
+.cm-s-obsidian span.cm-hashtag.cm-tag-rare {
     color: var(--wow-rare);
-    border-color: rgba(0, 112, 221, 0.5);
-    background: rgba(0, 112, 221, 0.1);
+    border-color: rgba(0, 112, 221, 0.6);
+    background: rgba(0, 112, 221, 0.12);
+    box-shadow: 0 0 6px rgba(0, 112, 221, 0.25);
 }
-a.tag[href*="epic"] {
+.markdown-rendered a.tag[href*="epic"],
+.cm-s-obsidian span.cm-hashtag.cm-tag-epic {
     color: var(--wow-epic);
-    border-color: rgba(163, 53, 238, 0.5);
-    background: rgba(163, 53, 238, 0.1);
+    border-color: rgba(163, 53, 238, 0.6);
+    background: rgba(163, 53, 238, 0.12);
+    box-shadow: 0 0 8px rgba(163, 53, 238, 0.35);
 }
-a.tag[href*="legendary"] {
+.markdown-rendered a.tag[href*="legendary"],
+.cm-s-obsidian span.cm-hashtag.cm-tag-legendary {
     color: var(--wow-legendary);
-    border-color: rgba(255, 128, 0, 0.5);
-    background: rgba(255, 128, 0, 0.1);
+    border-color: rgba(255, 128, 0, 0.6);
+    background: rgba(255, 128, 0, 0.12);
+    box-shadow: 0 0 10px rgba(255, 128, 0, 0.4);
 }
-a.tag[href*="artifact"] {
+.markdown-rendered a.tag[href*="artifact"],
+.cm-s-obsidian span.cm-hashtag.cm-tag-artifact {
     color: var(--wow-artifact);
-    border-color: rgba(230, 204, 128, 0.5);
-    background: rgba(230, 204, 128, 0.1);
+    border-color: rgba(230, 204, 128, 0.6);
+    background: rgba(230, 204, 128, 0.12);
+    box-shadow: 0 0 8px rgba(230, 204, 128, 0.35);
 }
