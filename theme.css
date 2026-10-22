@@ -457,27 +457,27 @@ tr:nth-child(even) td {
 
 /* Glowing Rarity Tags */
 a.tag[href*="uncommon"] {
-    color: var(--wow-uncommon) !important;
-    border-color: rgba(30, 255, 0, 0.5) !important;
-    background: rgba(30, 255, 0, 0.1) !important;
+    color: var(--wow-uncommon);
+    border-color: rgba(30, 255, 0, 0.5);
+    background: rgba(30, 255, 0, 0.1);
 }
 a.tag[href*="rare"] {
-    color: var(--wow-rare) !important;
-    border-color: rgba(0, 112, 221, 0.5) !important;
-    background: rgba(0, 112, 221, 0.1) !important;
+    color: var(--wow-rare);
+    border-color: rgba(0, 112, 221, 0.5);
+    background: rgba(0, 112, 221, 0.1);
 }
 a.tag[href*="epic"] {
-    color: var(--wow-epic) !important;
-    border-color: rgba(163, 53, 238, 0.5) !important;
-    background: rgba(163, 53, 238, 0.1) !important;
+    color: var(--wow-epic);
+    border-color: rgba(163, 53, 238, 0.5);
+    background: rgba(163, 53, 238, 0.1);
 }
 a.tag[href*="legendary"] {
-    color: var(--wow-legendary) !important;
-    border-color: rgba(255, 128, 0, 0.5) !important;
-    background: rgba(255, 128, 0, 0.1) !important;
+    color: var(--wow-legendary);
+    border-color: rgba(255, 128, 0, 0.5);
+    background: rgba(255, 128, 0, 0.1);
 }
 a.tag[href*="artifact"] {
-    color: var(--wow-artifact) !important;
-    border-color: rgba(230, 204, 128, 0.5) !important;
-    background: rgba(230, 204, 128, 0.1) !important;
+    color: var(--wow-artifact);
+    border-color: rgba(230, 204, 128, 0.5);
+    background: rgba(230, 204, 128, 0.1);
 }
