@@ -1,12 +1,12 @@
-# WoW - Warcraft UI
+# Azeroth
 
-### A World of Warcraft Interface Theme for Obsidian
+### World of Warcraft Interface Theme for Obsidian
 
 > *Bring the authentic World of Warcraft game interface, questlog parchment, and item tooltips to your Obsidian vault.*
 
-**WoW - Warcraft UI** is a comprehensive fantasy interface theme engineered for roleplayers, worldbuilders, game masters, and lorekeepers. Built with authentic Blizzard typography, custom SVG ornaments, quest markers, and deep **Style Settings** integration.
+**Azeroth** is a comprehensive fantasy interface theme engineered for roleplayers, worldbuilders, game masters, and lorekeepers. Built with authentic Blizzard typography, custom SVG ornaments, quest markers, and deep **Style Settings** integration.
 
-![WoW - Warcraft UI Theme Screenshot](assets/screenshot.png)
+![Azeroth Theme Screenshot](assets/screenshot.png)
 
 ---
 
@@ -109,8 +109,8 @@ Add `cssclasses: chatlog` to any note's YAML frontmatter to format the note with
 ### Manual Installation
 1. Download `theme.css` and `manifest.json` from the repository.
 2. In your Obsidian vault, navigate to `.obsidian/themes/`.
-3. Create a folder named `WoW - Warcraft UI` and place both files inside.
-4. In Obsidian, open **Settings → Appearance → Themes** and select **WoW - Warcraft UI**.
+3. Create a folder named `Azeroth` and place both files inside.
+4. In Obsidian, open **Settings → Appearance → Themes** and select **Azeroth**.
 
 ---
 
